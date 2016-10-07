@@ -27,17 +27,17 @@ def main():
     player = Player(screen, settings)
     player.create_snake()
     player.go_down()
-    food = Food(screen, settings)
-
+    food_sprite = pygame.sprite.GroupSingle(Food(screen, settings))
     # Game loop
     while running:
         # Handle events
         event.check_events(player)
         # Fill the screen and redraw objects
         screen.fill(settings.colors["grey"])
+        food_sprite.sprite.collision_detect(player.player_sprites, food_sprite)
         player.update()
         player.draw(screen)
-        food.blitme()
+        food_sprite.draw(screen)
         # Wait for clock
         clock.tick(10)
         # Refresh the screen
