@@ -10,3 +10,5 @@ class Settings:
         }
         # Window options
         self.screen_size = [1280, 720]
+
+        self.score = 0

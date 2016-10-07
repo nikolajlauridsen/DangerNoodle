@@ -39,7 +39,7 @@ def main():
         player.draw(screen)
         food_sprite.draw(screen)
         # Wait for clock
-        clock.tick(10)
+        clock.tick(10 + (settings.score//2))
         # Refresh the screen
         pygame.display.flip()
 

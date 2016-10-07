@@ -1,5 +1,6 @@
 import pygame
 import random
+from game.player import Segment
 
 class Food(pygame.sprite.Sprite):
 
@@ -22,6 +23,7 @@ class Food(pygame.sprite.Sprite):
         if len(hit_list) > 0:
             self.kill()
             print("You got a point!")
+            self.settings.score += 1
             food_sprite.add(Food(self.screen, self.settings))
 
     def blitme(self):

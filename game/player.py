@@ -48,7 +48,7 @@ class Player(pygame.sprite.Sprite):
         body_hit_list = pygame.sprite.spritecollide(segment,
                                                     self.player_sprites, False)
         if len(body_hit_list) > 0:
-            sys.exit("Game over")
+            sys.exit("Game over, final score: " + str(self.settings.score))
 
         self.snake_segments.insert(0, segment)
         self.player_sprites.add(segment)
