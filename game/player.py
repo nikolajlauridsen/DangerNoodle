@@ -42,7 +42,8 @@ class Player(pygame.sprite.Sprite):
             y = 0
         elif y < 0 - self.segment_height:
             y = self.settings.screen_size[1]
-        segment = Segment(x, y, self.segment_width, self.segment_height, self.settings)
+        segment = Segment(x, y, self.segment_width,
+                          self.segment_height, self.settings)
 
         # Collision detection
         body_hit_list = pygame.sprite.spritecollide(segment,
@@ -57,9 +58,19 @@ class Player(pygame.sprite.Sprite):
         for i in range(15):
             x = 250 + (self.segment_width + self.segment_margin) * i
             y = 30
-            segment = Segment(x, y, self.segment_width, self.segment_height, self.settings)
+            segment = Segment(x, y, self.segment_width,
+                              self.segment_height, self.settings)
             self.snake_segments.append(segment)
             self.player_sprites.add(segment)
+
+    def add_segment(self):
+        # Spawn segment out of the map to avoid collision
+        x = -200
+        y = -200
+        segment = Segment(x, y, self.segment_width,
+                          self.segment_height, self.settings)
+        self.snake_segments.append(segment)
+        self.player_sprites.add(segment)
 
     def go_left(self):
         self.change_y = 0

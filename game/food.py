@@ -1,6 +1,5 @@
 import pygame
 import random
-from game.player import Segment
 
 class Food(pygame.sprite.Sprite):
 
@@ -18,14 +17,10 @@ class Food(pygame.sprite.Sprite):
         self.rect.centerx = random.randint(0, self.settings.screen_size[0])
         self.rect.centery = random.randint(0, self.settings.screen_size[1])
 
-    def collision_detect(self, player_sprites, food_sprite):
-        hit_list = pygame.sprite.spritecollide(self, player_sprites, True)
+    def collision_detect(self, player, food_sprite):
+        hit_list = pygame.sprite.spritecollide(self, player.player_sprites, True)
         if len(hit_list) > 0:
             self.kill()
-            print("You got a point!")
             self.settings.score += 1
+            player.add_segment()
             food_sprite.add(Food(self.screen, self.settings))
-
-    def blitme(self):
-        """Draw the food"""
-        self.screen.blit(self.image, self.rect)

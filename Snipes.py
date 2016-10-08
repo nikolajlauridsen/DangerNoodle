@@ -3,7 +3,7 @@ import pygame
 from game.settings import Settings
 from game.player import Player
 from game.food import Food
-import game.events as event
+import game.events as event_handler
 
 
 def main():
@@ -31,10 +31,10 @@ def main():
     # Game loop
     while running:
         # Handle events
-        event.check_events(player)
+        event_handler.check_events(player)
         # Fill the screen and redraw objects
         screen.fill(settings.colors["grey"])
-        food_sprite.sprite.collision_detect(player.player_sprites, food_sprite)
+        food_sprite.sprite.collision_detect(player, food_sprite)
         player.update()
         player.draw(screen)
         food_sprite.draw(screen)
