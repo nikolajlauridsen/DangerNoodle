@@ -38,6 +38,7 @@ def main():
         player.update()
         player.draw(screen)
         food_sprite.draw(screen)
+        settings.render_score(screen)
         # Wait for clock
         clock.tick(10 + (settings.score//2))
         # Refresh the screen
