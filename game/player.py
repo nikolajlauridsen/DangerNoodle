@@ -32,18 +32,18 @@ class Player(pygame.sprite.Sprite):
         # Calculate the position for the new sprite
         x = self.snake_segments[0].rect.x + self.change_x
         y = self.snake_segments[0].rect.y + self.change_y
-        # Register whether a segment hit the edge of the screen
-        # If so set the position of the new segment to the other edge of the screen
-        if x > self.settings.screen_size[0] + self.segment_width:
-            x = 0
-        elif x < 0 - self.segment_width:
-            x = self.settings.screen_size[0]
-        elif y > self.settings.screen_size[1] + self.segment_height:
-            y = 0
-        elif y < 0 - self.segment_height:
-            y = self.settings.screen_size[1]
         segment = Segment(x, y, self.segment_width,
                           self.segment_height, self.settings)
+        # Register whether a segment hit the edge of the screen
+        # If so set the position of the new segment to the other edge of the screen
+        if segment.rect.right > self.settings.screen_size[0] + self.segment_margin:
+            segment.rect.left = 0 + self.segment_margin
+        elif segment.rect.left < 0 - self.segment_margin:
+            segment.rect.right = self.settings.screen_size[0] - self.segment_margin
+        elif segment.rect.bottom > self.settings.screen_size[1] + self.segment_margin:
+            segment.rect.top = 0 + self.segment_margin
+        elif segment.rect.top < 0 - self.segment_margin:
+            segment.rect.bottom = self.settings.screen_size[1] - self.segment_margin
 
         # Collision detection
         body_hit_list = pygame.sprite.spritecollide(segment,
@@ -55,7 +55,7 @@ class Player(pygame.sprite.Sprite):
         self.player_sprites.add(segment)
 
     def create_snake(self):
-        for i in range(15):
+        for i in range(25):
             x = 250 + (self.segment_width + self.segment_margin) * i
             y = 30
             segment = Segment(x, y, self.segment_width,

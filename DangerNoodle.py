@@ -15,7 +15,7 @@ def main():
 
     # Create Screen
     screen = pygame.display.set_mode(settings.screen_size)
-    pygame.display.set_caption("Snipes")
+    pygame.display.set_caption("Danger Noodle")
 
     # Create clock
     clock = pygame.time.Clock()
