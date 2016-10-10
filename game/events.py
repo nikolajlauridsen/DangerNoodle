@@ -12,6 +12,7 @@ def check_events(player):
 
         elif event.type == pygame.KEYDOWN:
             check_keydown_event(event, player)
+            break
 
 
 def check_keydown_event(event, player):

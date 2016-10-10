@@ -28,6 +28,7 @@ def main():
     player.create_snake()
     player.go_down()
     food_sprite = pygame.sprite.GroupSingle(Food(screen, settings))
+    
     # Game loop
     while running:
         # Handle events
