@@ -1,9 +1,6 @@
 import pygame
 import sys
 
-from game.settings import Settings
-settings = Settings()
-
 
 def check_events(player):
     for event in pygame.event.get():
@@ -26,3 +23,16 @@ def check_keydown_event(event, player):
         player.go_left()
     elif event.key == pygame.K_d and not player.change_x < 0:
         player.go_right()
+
+
+def check_menu_events(start_button, exit_button, settings):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit('Game exited by user.')
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if start_button.pressed(event):
+                settings.game_running = True
+            elif exit_button.pressed(event):
+                sys.exit('Game exited by user.')
+
+

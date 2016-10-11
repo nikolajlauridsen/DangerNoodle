@@ -15,6 +15,10 @@ class Settings:
 
         self.score = 0
 
+        # Running flags
+        self.death_menu = False
+        self.game_running = False
+
     def render_score(self, screen):
         score_font = pygame.font.Font(None, 35)
         score = score_font.render("Score: " + str(self.score), 1, (0, 0, 0))

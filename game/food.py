@@ -14,8 +14,8 @@ class Food(pygame.sprite.Sprite):
         self.image.fill(self.settings.colors["green"])
         self.rect = self.image.get_rect()
 
-        self.rect.centerx = random.randint(5, self.settings.screen_size[0]-5)
-        self.rect.centery = random.randint(5, self.settings.screen_size[1]-5)
+        self.rect.centerx = random.randint(10, self.settings.screen_size[0]-5)
+        self.rect.centery = random.randint(10, self.settings.screen_size[1]-5)
 
     def collision_detect(self, player, food_sprite):
         hit_list = pygame.sprite.spritecollide(self, player.player_sprites, False)
