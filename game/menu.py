@@ -1,10 +1,8 @@
 """Various menu related classes such as string_writer and so on"""
 import pygame
-from game.settings import Settings
+import game.events as event_handler
 from game.buttons import Button
 
-settings = Settings()
-clock = pygame.time.Clock()
 
 class StringWriter():
     """Class for drawing generic text to the screen"""
@@ -20,34 +18,33 @@ class StringWriter():
         self.screen.blit(text, text_rect)         # Lastly draw it to screen
 
 class DeathScreen():
-    def __init__(self, screen):
+    def __init__(self, screen, settings, clock):
         self.screen = screen
+        self.settings = settings
+        self.clock = clock
 
     def run(self):
-        while True:
-            self.screen.fill(settings.colors["grey"])
+        while self.settings.death_menu:
+            self.screen.fill(self.settings.colors["grey"])
             string_writer = StringWriter(self.screen)
-            retry_yes = Button(settings.screen_size[0]//2,
-                               settings.screen_size[1]//2, 250, 50,
-                               settings.colors["green"],
+            retry_yes = Button(self.settings.screen_size[0]//2,
+                               self.settings.screen_size[1]//2, 250, 50,
+                               self.settings.colors["green"],
                                "Yes", self.screen)
-            retry_no = Button(settings.screen_size[0]//2 + 300,
-                               settings.screen_size[1]//2, 250, 50,
-                               settings.colors["green"],
+            retry_no = Button(self.settings.screen_size[0]//2 + 300,
+                               self.settings.screen_size[1]//2, 250, 50,
+                               self.settings.colors["green"],
                               "No", self.screen)
             string_writer.draw_string("Game over!", 75,
-                                      settings.screen_size[0]//2,
-                                      (settings.screen_size[1]//2)-200)
+                                      self.settings.screen_size[0]//2,
+                                      (self.settings.screen_size[1]//2)-200)
             string_writer.draw_string("Retry?", 50,
-                                      settings.screen_size[0] // 2,
-                                      (settings.screen_size[1] // 2) - 100)
+                                      self.settings.screen_size[0] // 2,
+                                      (self.settings.screen_size[1] // 2) - 100)
             retry_yes.draw_button()
             retry_no.draw_button()
-            if retry_yes.pressed():
-                return True
-            elif retry_no.pressed():
-                return False
-            clock.tick(60)
+            event_handler.check_death_events(retry_yes, retry_no, self.settings)
+            self.clock.tick(60)
             pygame.display.flip()
 
 

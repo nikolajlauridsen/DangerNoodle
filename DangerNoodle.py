@@ -6,6 +6,7 @@ from game.player import Player
 from game.food import Food
 from game.buttons import Button
 from game.menu import StringWriter
+from game.menu import DeathScreen
 import game.events as event_handler
 
 
@@ -26,12 +27,6 @@ def main():
     # Running flags
     app_running = True
 
-
-    # Create initial sprites
-    player = Player(screen, settings)
-    player.create_snake()
-    player.go_down()
-    food_sprite = pygame.sprite.GroupSingle(Food(screen, settings))
     # Menu buttons
     play_button_x = settings.screen_size[0]/2
     play_button_y = settings.screen_size[1]/2
@@ -40,6 +35,7 @@ def main():
     
     # Menu text
     string_writer = StringWriter(screen)
+    death_menu = DeathScreen(screen, settings, clock)
 
     # Game menu
     while app_running:
@@ -52,6 +48,13 @@ def main():
                                   (settings.screen_size[1] // 2) - 200)
         event_handler.check_menu_events(play_button, exit_button, settings)
 
+        if settings.game_running:
+            # Create or recreate sprites and reset score
+            settings.score = 0
+            player = Player(screen, settings)
+            player.create_snake()
+            player.go_down()
+            food_sprite = pygame.sprite.GroupSingle(Food(screen, settings))
         while settings.game_running:
             # Handle events
             event_handler.check_events(player)
@@ -66,6 +69,9 @@ def main():
             clock.tick(10 + (settings.score//4))
             # Refresh the screen
             pygame.display.flip()
+
+        # If death_menu flag is True run the death menu
+        death_menu.run()
 
         # Limit menu to 60 fps
         clock.tick(60)
