@@ -15,6 +15,7 @@ class Settings:
 
         # Player options
         self.snake_size = 25
+        self.start_speed = 10
 
         self.score = 0
 

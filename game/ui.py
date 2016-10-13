@@ -157,23 +157,62 @@ class SettingsMenu:
         self.clock = clock
 
         # Strings
-        self.snake_size_title = StringWriter(self.screen, "Snake Size:", 30,
+        # Snake Size
+        self.snake_size_title = StringWriter(self.screen, "Start size:", 30,
                                              self.settings.screen_size[0]//2,
                                              self.settings.screen_size[1]//2-40)
         self.snake_size = StringWriter(self.screen,
                                        str(self.settings.snake_size), 25,
                                        self.settings.screen_size[0]//2,
                                        self.settings.screen_size[1]//2)
+        # starting speed
+        self.start_speed_title = StringWriter(self.screen, "Start speed:", 30,
+                                              self.settings.screen_size[0] // 2,
+                                              self.settings.screen_size[1] // 2 - 140)
+        self.start_speed = StringWriter(self.screen,
+                                        str(self.settings.start_speed), 25,
+                                        self.settings.screen_size[0] // 2,
+                                        self.settings.screen_size[1] // 2-80)
 
         # Buttons
+        # -------Snake Size Buttons-------
         self.snake_size_plus = Button(self.settings.screen_size[0]//2+100,
                                      self.settings.screen_size[1]//2, 50, 50,
                                      self.settings.colors["green"],
                                      "+", self.screen)
+        self.snake_size_plus_five = Button(self.settings.screen_size[0]//2+160,
+                                     self.settings.screen_size[1]//2, 50, 50,
+                                     self.settings.colors["green"],
+                                     "+5", self.screen)
         self.snake_size_minus = Button(self.settings.screen_size[0] // 2-100,
                                       self.settings.screen_size[1] // 2, 50, 50,
                                       self.settings.colors["green"],
                                       "-", self.screen)
+        self.snake_size_minus_five = Button(self.settings.screen_size[0] // 2 - 160,
+                                       self.settings.screen_size[1] // 2, 50,
+                                       50,
+                                       self.settings.colors["green"],
+                                       "-5", self.screen)
+        # Start Speed Buttons
+        self.start_speed_plus = Button(self.settings.screen_size[0] // 2 + 100,
+                                       self.settings.screen_size[1] // 2 - 80, 50,
+                                       50,
+                                       self.settings.colors["green"],
+                                       "+", self.screen)
+        self.start_speed_plus_five = Button(self.settings.screen_size[0] // 2 + 160,
+                                           self.settings.screen_size[1] // 2 - 80, 50, 50,
+                                           self.settings.colors["green"],
+                                           "+5", self.screen)
+        self.start_speed_minus = Button(self.settings.screen_size[0] // 2 - 100,
+                                       self.settings.screen_size[1] // 2 - 80, 50,
+                                       50,
+                                       self.settings.colors["green"],
+                                       "-", self.screen)
+        self.start_speed_minus_five = Button(self.settings.screen_size[0] // 2 - 160,
+                                             self.settings.screen_size[1] // 2 - 80, 50,
+                                             50,
+                                             self.settings.colors["green"],
+                                             "-5", self.screen)
         self.exit_button = Button(self.settings.screen_size[0]//2,
                                  self.settings.screen_size[1]//2+75, 250, 50,
                                  self.settings.colors["green"],
@@ -182,12 +221,24 @@ class SettingsMenu:
     def run(self):
         while self.settings.settings_menu:
             self.screen.fill(self.settings.colors["grey"])
+            # Snake size elements
             self.snake_size_title.draw()
             self.snake_size.draw()
             self.snake_size_plus.draw_button()
+            self.snake_size_plus_five.draw_button()
             self.snake_size_minus.draw_button()
+            self.snake_size_minus_five.draw_button()
+            # Start speed elements
+            self.start_speed_title.draw()
+            self.start_speed.draw()
+            self.start_speed_plus.draw_button()
+            self.start_speed_plus_five.draw_button()
+            self.start_speed_minus.draw_button()
+            self.start_speed_minus_five.draw_button()
+            # Exit elements
             self.exit_button.draw_button()
             self.check_events()
+            # Tick and flip
             self.clock.tick(60)
             pygame.display.flip()
 
@@ -200,9 +251,29 @@ class SettingsMenu:
                     self.settings.settings_menu = False
                     self.settings.game_running = False
                     self.settings.main_menu = True
+                # Snake size events
                 elif self.snake_size_plus.pressed(event):
                     self.settings.snake_size += 1
+                    self.snake_size.update_text(str(self.settings.snake_size))
+                elif self.snake_size_plus_five.pressed(event):
+                    self.settings.snake_size += 5
                     self.snake_size.update_text(str(self.settings.snake_size))
                 elif self.snake_size_minus.pressed(event) and self.settings.snake_size > 2:
                     self.settings.snake_size -= 1
                     self.snake_size.update_text(str(self.settings.snake_size))
+                elif self.snake_size_minus_five.pressed(event) and self.settings.snake_size > 2:
+                    self.settings.snake_size -= 5
+                    self.snake_size.update_text(str(self.settings.snake_size))
+                # Start speed events
+                elif self.start_speed_plus.pressed(event):
+                    self.settings.start_speed += 1
+                    self.start_speed.update_text(str(self.settings.start_speed))
+                elif self.start_speed_plus_five.pressed(event):
+                    self.settings.start_speed += 5
+                    self.start_speed.update_text(str(self.settings.start_speed))
+                elif self.start_speed_minus.pressed(event):
+                    self.settings.start_speed -= 1
+                    self.start_speed.update_text(str(self.settings.start_speed))
+                elif self.start_speed_minus_five.pressed(event):
+                    self.settings.start_speed -= 5
+                    self.start_speed.update_text(str(self.settings.start_speed))
