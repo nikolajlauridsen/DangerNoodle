@@ -13,10 +13,13 @@ class Settings:
         # Window options
         self.screen_size = [1280, 720]
 
-        self.score = 0
+        # Player options
         self.snake_size = 25
 
+        self.score = 0
+
         # Running flags
+        self.main_menu = True
         self.death_menu = False
         self.game_running = False
         self.settings_menu = False
