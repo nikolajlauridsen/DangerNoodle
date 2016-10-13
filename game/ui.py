@@ -25,7 +25,6 @@ class StringWriter():
 
 class Button:
     def __init__(self, x, y, width, height, color, text, screen):
-
         self.screen = screen
         self.text = text
 

@@ -23,11 +23,3 @@ class Settings:
         self.death_menu = False
         self.game_running = False
         self.settings_menu = False
-
-    def render_score(self, screen):
-        score_font = pygame.font.Font(None, 35)
-        score = score_font.render("Score: " + str(self.score), 1, (0, 0, 0))
-        score_rect = score.get_rect()
-        score_rect.centerx = self.screen_size[0] - 100
-        score_rect.centery = 20
-        screen.blit(score, score_rect)
