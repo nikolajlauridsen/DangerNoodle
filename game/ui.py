@@ -1,24 +1,54 @@
-"""Various menu related classes such as string_writer and so on"""
+"""UI objects like StringWriter and Buttons as well as menu classes"""
 import pygame
 import sys
-from game.buttons import Button
 
 
 class StringWriter():
     """Class for drawing generic text to the screen"""
-    def __init__(self, screen):
+    def __init__(self, screen, string, size, x, y):
         self.screen = screen
+        self.font = pygame.font.Font(None, size)  # Create font with desired size
+        self.text = self.font.render(string, 1, (0, 0, 0))  # Create a text "sprite"
+        self.text_rect = self.text.get_rect()  # get it's rect
+        self.text_rect.centerx = x  # and set it's location
+        self.text_rect.centery = y
 
-    # TODO: Make this more efficient (No reason to create a new font object
-    # and text rect on every pass (this function alones takes up 6,4% of
-    # cpu time
-    def draw_string(self, string, size, x, y):
-        font = pygame.font.Font(None, size)       # Create font with desired size
-        text = font.render(string, 1, (0, 0, 0))  # Create a text "sprite"
-        text_rect = text.get_rect()               # get it's rect
-        text_rect.centerx = x                     # and se it's location
-        text_rect.centery = y
-        self.screen.blit(text, text_rect)         # Lastly draw it to screen
+    def update_text(self, string):
+        try:
+            self.text = self.font.render(string, 1, (0, 0, 0))
+        except TypeError:
+            self.text = self.font.render(str(string), 1, (0, 0, 0))
+
+    def draw(self):
+        self.screen.blit(self.text, self.text_rect)
+
+
+class Button:
+    def __init__(self, x, y, width, height, color, text, screen):
+
+        self.screen = screen
+        self.text = text
+
+        self.image = pygame.Surface([width, height])
+        self.image.fill(color)
+
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.centery = y
+        self.button_text = StringWriter(self.screen, text, 30,
+                                        self.rect.centerx,
+                                        self.rect.centery)
+
+    def draw_button(self):
+        self.screen.blit(self.image, self.rect)
+        self.button_text.draw()
+
+    def pressed(self, event):
+        if event.pos[0] >= self.rect.left and event.pos[0] <= self.rect.right:
+            if event.pos[1] >= self.rect.top and event.pos[1] <= self.rect.bottom:
+                return True
+        else:
+            return False
 
 
 class MainMenu:
@@ -34,7 +64,9 @@ class MainMenu:
                                       settings.colors["green"], "Settings", screen)
         self.exit_button = Button(play_button_x, play_button_y+150, 200, 50,
                                   settings.colors["green"], "Exit", screen)
-        self.string_writer = StringWriter(screen)
+        self.heading = StringWriter(screen, "Danger Noodle", 75,
+                                    self.settings.screen_size[0] // 2,
+                                    (self.settings.screen_size[1] // 2) - 200)
 
     def run(self):
         while self.settings.main_menu:
@@ -42,9 +74,7 @@ class MainMenu:
             self.play_button.draw_button()
             self.settings_button.draw_button()
             self.exit_button.draw_button()
-            self.string_writer.draw_string("Danger Noodle", 75,
-                                           self.settings.screen_size[0] // 2,
-                                           (self.settings.screen_size[1] // 2) - 200)
+            self.heading.draw()
             self.check_events()
             self.clock.tick(60)
             pygame.display.flip()
@@ -69,7 +99,21 @@ class DeathScreen:
         self.screen = screen
         self.settings = settings
         self.clock = clock
-        self.string_writer = StringWriter(self.screen)
+        # Strings
+        self.heading_string = StringWriter(self.screen, "Game over!", 75,
+                                           self.settings.screen_size[0]//2,
+                                           (self.settings.screen_size[1]//2)-200)
+
+        self.score_string = StringWriter(self.screen,
+                                         "Final Score: " + str(self.settings.score),
+                                         50, self.settings.screen_size[0]//2,
+                                         self.settings.screen_size[1]//2-125)
+
+        self.retry_string = StringWriter(self.screen, "Retry?", 50,
+                                         self.settings.screen_size[0] // 2,
+                                         (self.settings.screen_size[1] // 2) - 50)
+
+        # Buttons
         self.retry_yes = Button(self.settings.screen_size[0] // 2 - 150,
                                 self.settings.screen_size[1] // 2 + 25, 250, 50,
                                 self.settings.colors["green"],
@@ -83,16 +127,10 @@ class DeathScreen:
         while self.settings.death_menu:
             self.screen.fill(self.settings.colors["grey"])
 
-            self.string_writer.draw_string("Game over!", 75,
-                                           self.settings.screen_size[0]//2,
-                                           (self.settings.screen_size[1]//2)-200)
-            self.string_writer.draw_string("Final Score: " + str(self.settings.score),
-                                           50,
-                                           self.settings.screen_size[0]//2,
-                                           self.settings.screen_size[1]//2-125)
-            self.string_writer.draw_string("Retry?", 50,
-                                           self.settings.screen_size[0] // 2,
-                                           (self.settings.screen_size[1] // 2) - 50)
+            self.heading_string.draw()
+            self.score_string.update_text("Final Score: " + str(self.settings.score))
+            self.score_string.draw()
+            self.retry_string.draw()
             self.retry_yes.draw_button()
             self.retry_no.draw_button()
             self.check_events()
@@ -118,6 +156,17 @@ class SettingsMenu:
         self.screen = screen
         self.settings = settings
         self.clock = clock
+
+        # Strings
+        self.snake_size_title = StringWriter(self.screen, "Snake Size:", 30,
+                                             self.settings.screen_size[0]//2,
+                                             self.settings.screen_size[1]//2-40)
+        self.snake_size = StringWriter(self.screen,
+                                       str(self.settings.snake_size), 25,
+                                       self.settings.screen_size[0]//2,
+                                       self.settings.screen_size[1]//2)
+
+        # Buttons
         self.snake_size_plus = Button(self.settings.screen_size[0]//2+100,
                                      self.settings.screen_size[1]//2, 50, 50,
                                      self.settings.colors["green"],
@@ -130,17 +179,12 @@ class SettingsMenu:
                                  self.settings.screen_size[1]//2+75, 250, 50,
                                  self.settings.colors["green"],
                                  "Exit", self.screen)
-        self.string_writer = StringWriter(self.screen)
 
     def run(self):
         while self.settings.settings_menu:
             self.screen.fill(self.settings.colors["grey"])
-            self.string_writer.draw_string("Snake Size:", 30,
-                                      self.settings.screen_size[0]//2,
-                                      self.settings.screen_size[1]//2-40)
-            self.string_writer.draw_string(str(self.settings.snake_size), 25,
-                                           self.settings.screen_size[0]//2,
-                                           self.settings.screen_size[1]//2)
+            self.snake_size_title.draw()
+            self.snake_size.draw()
             self.snake_size_plus.draw_button()
             self.snake_size_minus.draw_button()
             self.exit_button.draw_button()
@@ -159,5 +203,7 @@ class SettingsMenu:
                     self.settings.main_menu = True
                 elif self.snake_size_plus.pressed(event):
                     self.settings.snake_size += 1
+                    self.snake_size.update_text(str(self.settings.snake_size))
                 elif self.snake_size_minus.pressed(event) and self.settings.snake_size > 2:
                     self.settings.snake_size -= 1
+                    self.snake_size.update_text(str(self.settings.snake_size))

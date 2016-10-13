@@ -5,7 +5,7 @@ Very old school, much retro
 TODO:
 * ~~Improve screen edge detection to avoid player moving outside game area~~
 * ~~Make menus~~ Finish/improve menus
-* Optimize StringWriter
+* ~~Optimize StringWriter~~
 * High score
 
 

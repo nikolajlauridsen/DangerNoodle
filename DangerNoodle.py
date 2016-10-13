@@ -3,7 +3,7 @@ import pygame
 from game.settings import Settings
 from game.player import Player
 from game.food import Food
-from game.menu import *
+from game.ui import *
 import game.events as event_handler
 
 
@@ -29,6 +29,10 @@ def main():
     death_menu = DeathScreen(screen, settings, clock)
     settings_menu = SettingsMenu(screen, settings, clock)
 
+    # Game score for game loop
+    score = StringWriter(screen, "Score: " + str(settings.score), 35,
+                         settings.screen_size[0] - 100, 20)
+
     while app_running:
         # App loop
         # Run different menus depending on running flags in settings
@@ -49,11 +53,11 @@ def main():
             event_handler.check_events(player)
             # Fill the screen and redraw objects
             screen.fill(settings.colors["grey"])
-            food_sprite.sprite.collision_detect(player, food_sprite)
+            food_sprite.sprite.collision_detect(player, food_sprite, score)
             player.update()
             player.draw(screen)
             food_sprite.draw(screen)
-            settings.render_score(screen)
+            score.draw()
             # Wait for clock
             clock.tick(10 + (settings.score//4))
             # Refresh the screen
