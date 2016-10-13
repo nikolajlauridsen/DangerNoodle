@@ -1,12 +1,10 @@
 import pygame
-import sys
 
 from game.settings import Settings
 from game.player import Player
 from game.food import Food
 from game.buttons import Button
-from game.menu import StringWriter
-from game.menu import DeathScreen
+from game.menu import StringWriter, DeathScreen, SettingsMenu
 import game.events as event_handler
 
 
@@ -31,22 +29,28 @@ def main():
     play_button_x = settings.screen_size[0]/2
     play_button_y = settings.screen_size[1]/2
     play_button = Button(play_button_x, play_button_y, 200, 50, settings.colors["green"], "Play", screen)
-    exit_button = Button(play_button_x, play_button_y+75, 200, 50, settings.colors["green"], "Exit", screen)
+    settings_button = Button(play_button_x, play_button_y+75, 200, 50, settings.colors["green"], "Settings", screen)
+    exit_button = Button(play_button_x, play_button_y+150, 200, 50, settings.colors["green"], "Exit", screen)
     
     # Menu text
     string_writer = StringWriter(screen)
     death_menu = DeathScreen(screen, settings, clock)
+    settings_menu = SettingsMenu(screen, settings, clock)
 
     # Game menu
     while app_running:
         # Game loop
         screen.fill(settings.colors["grey"])
         play_button.draw_button()
+        settings_button.draw_button()
         exit_button.draw_button()
         string_writer.draw_string("Danger Noodle", 75,
                                   settings.screen_size[0] // 2,
                                   (settings.screen_size[1] // 2) - 200)
-        event_handler.check_menu_events(play_button, exit_button, settings)
+
+        event_handler.check_menu_events(play_button, exit_button, settings_button, settings)
+
+        settings_menu.run()
 
         if settings.game_running:
             # Create or recreate sprites and reset score

@@ -30,8 +30,6 @@ class Button:
     def pressed(self, event):
         if event.pos[0] >= self.rect.left and event.pos[0] <= self.rect.right:
             if event.pos[1] >= self.rect.top and event.pos[1] <= self.rect.bottom:
-                print(event)
-                print("x" + str(event.pos[0]) + " y " + str(event.pos[1]))
                 return True
         else:
             return False

@@ -25,13 +25,15 @@ def check_keydown_event(event, player):
         player.go_right()
 
 
-def check_menu_events(start_button, exit_button, settings):
+def check_menu_events(start_button, exit_button, settings_button, settings):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit('Game exited by user.')
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if start_button.pressed(event):
                 settings.game_running = True
+            elif settings_button.pressed(event):
+                settings.settings_menu = True
             elif exit_button.pressed(event):
                 sys.exit('Game exited by user.')
 

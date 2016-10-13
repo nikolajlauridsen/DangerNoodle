@@ -56,7 +56,7 @@ class Player(pygame.sprite.Sprite):
         self.player_sprites.add(segment)
 
     def create_snake(self):
-        for i in range(25):
+        for i in range(self.settings.snake_size):
             x = 250 + (self.segment_width + self.segment_margin) * i
             y = 30
             segment = Segment(x, y, self.segment_width,

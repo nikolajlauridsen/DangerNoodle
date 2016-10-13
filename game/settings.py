@@ -14,10 +14,12 @@ class Settings:
         self.screen_size = [1280, 720]
 
         self.score = 0
+        self.snake_size = 25
 
         # Running flags
         self.death_menu = False
         self.game_running = False
+        self.settings_menu = False
 
     def render_score(self, screen):
         score_font = pygame.font.Font(None, 35)
