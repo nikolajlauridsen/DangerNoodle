@@ -3,8 +3,9 @@ The classic snake game remade in Pygame (WIP)
 Very old school, much retro
 
 TODO:
-* Improve screen edge detection to avoid player moving outside game area
-* Make menus
+* ~~Improve screen edge detection to avoid player moving outside game area~~
+* ~~Make menus~~ Finish/improve menus
+* Optimize StringWriter
 * High score
 
 
