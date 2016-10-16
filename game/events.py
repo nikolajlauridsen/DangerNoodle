@@ -2,19 +2,22 @@ import pygame
 import sys
 
 
-def check_events(player):
+def check_events(player, settings):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit("Game exited by user.")
 
         elif event.type == pygame.KEYDOWN:
-            check_keydown_event(event, player)
+            check_keydown_event(event, player, settings)
             break
 
 
-def check_keydown_event(event, player):
+def check_keydown_event(event, player, settings):
     if event.key == pygame.K_ESCAPE:
-        sys.exit("Game exited by user.")
+        if settings.game_paused:
+            settings.game_paused = False
+        elif not settings.game_paused:
+            settings.game_paused = True
     elif event.key == pygame.K_w and not player.change_y > 0:
         player.go_up()
     elif event.key == pygame.K_s and not player.change_y < 0:

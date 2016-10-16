@@ -7,7 +7,8 @@ class Settings:
         self.colors = {
             "grey": (240, 248, 255),
             "red": (227, 38, 54),
-            "green": (0, 128, 0)
+            "green": (0, 128, 0),
+            "metal": (96, 130, 182)
         }
 
         # Window options
@@ -24,3 +25,4 @@ class Settings:
         self.death_menu = False
         self.game_running = False
         self.settings_menu = False
+        self.game_paused = False

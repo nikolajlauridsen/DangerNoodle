@@ -43,6 +43,7 @@ def main():
         if settings.game_running:
             # Create or recreate sprites and reset score
             settings.score = 0
+            score.update_text("Score: " + str(settings.score))
             player = Player(screen, settings)
             player.create_snake()
             player.go_down()
@@ -50,18 +51,20 @@ def main():
         while settings.game_running:
             # Game loop
             # Handle events
-            event_handler.check_events(player)
-            # Fill the screen and redraw objects
-            screen.fill(settings.colors["grey"])
-            food_sprite.sprite.collision_detect(player, food_sprite, score)
-            player.update()
-            player.draw(screen)
-            food_sprite.draw(screen)
-            score.draw()
+            event_handler.check_events(player, settings)
             # Wait for clock
-            clock.tick(settings.start_speed + (settings.score//4))
-            # Refresh the screen
-            pygame.display.flip()
+            clock.tick(settings.start_speed + (settings.score // 4))
+            # Fill the screen and redraw objects
+            if not settings.game_paused:
+                screen.fill(settings.colors["grey"])
+                food_sprite.sprite.collision_detect(player, food_sprite, score)
+                player.update()
+                player.draw(screen)
+                food_sprite.draw(screen)
+                score.draw()
+
+                # Refresh the screen
+                pygame.display.flip()
 
     pygame.quit()
 

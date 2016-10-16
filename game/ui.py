@@ -5,10 +5,10 @@ import sys
 
 class StringWriter():
     """Class for drawing generic text to the screen"""
-    def __init__(self, screen, string, size, x, y):
+    def __init__(self, screen, string, size, x, y, color = (0, 0, 0)):
         self.screen = screen
         self.font = pygame.font.Font(None, size)  # Create font with desired size
-        self.text = self.font.render(string, 1, (0, 0, 0))  # Create a text "sprite"
+        self.text = self.font.render(string, 1, color)  # Create a text "sprite"
         self.text_rect = self.text.get_rect()  # get it's rect
         self.text_rect.centerx = x  # and set it's location
         self.text_rect.centery = y
@@ -24,21 +24,28 @@ class StringWriter():
 
 
 class Button:
-    def __init__(self, x, y, width, height, color, text, screen):
+    def __init__(self, x, y, width, height, color, text, screen, border=6,
+                 border_color=(0, 0, 0)):
         self.screen = screen
         self.text = text
 
         self.image = pygame.Surface([width, height])
+        self.border = pygame.Surface([width+border, height+border])
         self.image.fill(color)
+        self.border.fill(border_color)
 
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.centery = y
+        self.border_rect = self.border.get_rect()
+        self.border_rect.centerx = self.rect.centerx
+        self.border_rect.centery = self.rect.centery
         self.button_text = StringWriter(self.screen, text, 30,
                                         self.rect.centerx,
                                         self.rect.centery)
 
     def draw_button(self):
+        self.screen.blit(self.border, self.border_rect)
         self.screen.blit(self.image, self.rect)
         self.button_text.draw()
 
@@ -58,14 +65,15 @@ class MainMenu:
         play_button_x = settings.screen_size[0]//2
         play_button_y = settings.screen_size[1]//2
         self.play_button = Button(play_button_x, play_button_y, 200, 50,
-                                  settings.colors["green"], "Play", screen)
+                                  settings.colors["metal"], "Play", screen)
         self.settings_button = Button(play_button_x, play_button_y+75, 200, 50,
-                                      settings.colors["green"], "Settings", screen)
+                                      settings.colors["metal"], "Settings", screen)
         self.exit_button = Button(play_button_x, play_button_y+150, 200, 50,
-                                  settings.colors["green"], "Exit", screen)
+                                  settings.colors["metal"], "Exit", screen)
         self.heading = StringWriter(screen, "Danger Noodle", 75,
                                     self.settings.screen_size[0] // 2,
-                                    (self.settings.screen_size[1] // 2) - 200)
+                                    (self.settings.screen_size[1] // 2) - 200,
+                                    color=self.settings.colors["green"])
 
     def run(self):
         while self.settings.main_menu:
@@ -144,10 +152,12 @@ class DeathScreen:
                 if self.retry_yes.pressed(event):
                     self.settings.game_running = True
                     self.settings.death_menu = False
+                    self.settings.score = 0
                 elif self.retry_no.pressed(event):
                     self.settings.main_menu = True
                     self.settings.game_running = False
                     self.settings.death_menu = False
+                    self.settings.score = 0
 
 
 class SettingsMenu:
@@ -251,29 +261,37 @@ class SettingsMenu:
                     self.settings.settings_menu = False
                     self.settings.game_running = False
                     self.settings.main_menu = True
+
                 # Snake size events
                 elif self.snake_size_plus.pressed(event):
                     self.settings.snake_size += 1
                     self.snake_size.update_text(str(self.settings.snake_size))
+
                 elif self.snake_size_plus_five.pressed(event):
                     self.settings.snake_size += 5
                     self.snake_size.update_text(str(self.settings.snake_size))
+
                 elif self.snake_size_minus.pressed(event) and self.settings.snake_size > 2:
                     self.settings.snake_size -= 1
                     self.snake_size.update_text(str(self.settings.snake_size))
+
                 elif self.snake_size_minus_five.pressed(event) and self.settings.snake_size > 2:
                     self.settings.snake_size -= 5
                     self.snake_size.update_text(str(self.settings.snake_size))
+
                 # Start speed events
                 elif self.start_speed_plus.pressed(event):
                     self.settings.start_speed += 1
                     self.start_speed.update_text(str(self.settings.start_speed))
+
                 elif self.start_speed_plus_five.pressed(event):
                     self.settings.start_speed += 5
                     self.start_speed.update_text(str(self.settings.start_speed))
+
                 elif self.start_speed_minus.pressed(event):
                     self.settings.start_speed -= 1
                     self.start_speed.update_text(str(self.settings.start_speed))
+
                 elif self.start_speed_minus_five.pressed(event):
                     self.settings.start_speed -= 5
                     self.start_speed.update_text(str(self.settings.start_speed))
