@@ -23,6 +23,54 @@ class StringWriter:
     def draw(self):
         self.screen.blit(self.text, self.text_rect)
 
+class StringInput:
+    def __init__(self, screen, settings, clock, x, y, limit=50,
+                 default_text="Click to write..."):
+        self.screen = screen
+        self.settings = settings
+        self.clock = clock
+        self.x = x
+        self.y = y
+        self.limit = limit
+        self.keyboard_input = default_text
+        self.text_length = len(self.keyboard_input)
+        self.capturing = False
+
+        # Grahpics stuff
+        self.text = StringWriter(self.screen, self.keyboard_input, 25, self.x, self.y)
+        self.image = pygame.Surface([500, 50])
+        self.image.fill((255, 255, 255))
+        self.rect = self.image.get_rect()
+        self.rect.centerx = self.x
+        self.rect.centery = self.y
+
+    def capture(self, event):
+        if self.capturing:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_DOWN:
+                    self.capturing = False
+                elif len(self.keyboard_input) < self.limit:
+                    self.keyboard_input += event.unicode
+
+    def draw_frame(self):
+        if self.text_length != len(self.keyboard_input):
+            self.text.update_text(self.keyboard_input)
+            self.text_length = len(self.keyboard_input)
+        self.screen.blit(self.image, self.rect)
+        self.text.draw()
+
+    def check_pressed(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.pos[0] >= self.rect.left and event.pos[0] <= self.rect.right:
+                if event.pos[1] >= self.rect.top and event.pos[1] <= self.rect.bottom:
+                    self.keyboard_input = ""
+                    self.capturing = True
+            else:
+                pass
+
+        elif event.type == pygame.QUIT:
+            sys.exit()
+
 
 class Button:
     def __init__(self, x, y, width, height, color, text, screen, border=6,
@@ -119,10 +167,12 @@ class MainMenu:
 
 
 class DeathScreen:
-    def __init__(self, screen, settings, clock):
+    def __init__(self, screen, settings, clock, db):
         self.screen = screen
         self.settings = settings
         self.clock = clock
+        self.db = db
+        self.high_score_saved = False
         # Strings
         self.heading_string = StringWriter(self.screen, "Game over!", 70,
                                            self.settings.screen_middle[0],
@@ -135,17 +185,24 @@ class DeathScreen:
 
         self.retry_string = StringWriter(self.screen, "Retry?", 40,
                                          self.settings.screen_middle[0],
-                                         (self.settings.screen_middle[1]) - 0)
+                                         (self.settings.screen_middle[1]) + 100)
 
         # Buttons
         self.retry_yes = Button(self.settings.screen_middle[0] - 150,
-                                self.settings.screen_middle[1] + 75, 250, 50,
+                                self.settings.screen_middle[1] + 175, 250, 50,
                                 self.settings.colors["green"],
                                 "Yes", self.screen)
         self.retry_no = Button(self.settings.screen_middle[0] + 150,
-                               self.settings.screen_middle[1] + 75, 250, 50,
-                               self.settings.colors["green"],
+                               self.settings.screen_middle[1] + 175, 250, 50,
+                               self.settings.colors["red"],
                                "No", self.screen)
+        self.save_high_score = Button(self.settings.screen_middle[0],
+                                      self.settings.screen_middle[1],
+                                      250, 50, self.settings.colors["metal"],
+                                      "Save highscore", self.screen)
+        self.input = StringInput(self.screen, self.settings, self.clock,
+                                 self.settings.screen_middle[0],
+                                 self.settings.screen_middle[1]-100)
 
     def run(self):
         while self.settings.death_menu:
@@ -157,12 +214,17 @@ class DeathScreen:
             self.retry_string.draw()
             self.retry_yes.draw_button()
             self.retry_no.draw_button()
+            self.input.draw_frame()
+            self.save_high_score.draw_button()
             self.check_events()
             self.clock.tick(60)
             pygame.display.flip()
 
     def check_events(self):
         for event in pygame.event.get():
+            if not self.high_score_saved:
+                self.input.check_pressed(event)
+                self.input.capture(event)
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -175,6 +237,13 @@ class DeathScreen:
                     self.settings.game_running = False
                     self.settings.death_menu = False
                     self.settings.score = 0
+                elif self.save_high_score.pressed(event) and not self.high_score_saved:
+                    name = self.input.keyboard_input
+                    score = self.settings.score
+                    self.db.insert_highscore(score, name)
+                    self.db.save_changes()
+                    self.high_score_saved = True
+                    self.input.keyboard_input = "Highscore Saved"
 
 
 class PauseScreen:
@@ -224,12 +293,13 @@ class PauseScreen:
                 elif self.resume_button.pressed(event):
                     self.settings.game_paused = False
 
+
 class HighScore:
-    def __init__(self, screen, settings, clock):
+    def __init__(self, screen, settings, clock, db):
         self.screen = screen
         self.settings = settings
         self.clock = clock
-        self.db = DbHandler()
+        self.db = db
         self.high_scores = self.db.get_highscore()
         self.high_score_labesls = []
         self.create_labels()
@@ -304,44 +374,44 @@ class SettingsMenu:
         # -------Snake Size Buttons-------
         self.snake_size_plus = Button(self.settings.screen_middle[0]+100,
                                      self.settings.screen_middle[1], 50, 50,
-                                     self.settings.colors["green"],
+                                     self.settings.colors["metal"],
                                      "+", self.screen)
         self.snake_size_plus_five = Button(self.settings.screen_middle[0]+160,
                                      self.settings.screen_middle[1], 50, 50,
-                                     self.settings.colors["green"],
+                                     self.settings.colors["metal"],
                                      "+5", self.screen)
         self.snake_size_minus = Button(self.settings.screen_middle[0]-100,
                                       self.settings.screen_middle[1], 50, 50,
-                                      self.settings.colors["green"],
+                                      self.settings.colors["metal"],
                                       "-", self.screen)
         self.snake_size_minus_five = Button(self.settings.screen_middle[0] - 160,
                                        self.settings.screen_middle[1], 50,
                                        50,
-                                       self.settings.colors["green"],
+                                       self.settings.colors["metal"],
                                        "-5", self.screen)
         # Start Speed Buttons
         self.start_speed_plus = Button(self.settings.screen_middle[0] + 100,
                                        self.settings.screen_middle[1] - 90, 50,
                                        50,
-                                       self.settings.colors["green"],
+                                       self.settings.colors["metal"],
                                        "+", self.screen)
         self.start_speed_plus_five = Button(self.settings.screen_middle[0] + 160,
                                            self.settings.screen_middle[1] - 90, 50, 50,
-                                           self.settings.colors["green"],
+                                           self.settings.colors["metal"],
                                            "+5", self.screen)
         self.start_speed_minus = Button(self.settings.screen_middle[0] - 100,
                                        self.settings.screen_middle[1] - 90, 50,
                                        50,
-                                       self.settings.colors["green"],
+                                       self.settings.colors["metal"],
                                        "-", self.screen)
         self.start_speed_minus_five = Button(self.settings.screen_middle[0] - 160,
                                              self.settings.screen_middle[1] - 90, 50,
                                              50,
-                                             self.settings.colors["green"],
+                                             self.settings.colors["metal"],
                                              "-5", self.screen)
         self.exit_button = Button(self.settings.screen_middle[0],
                                  self.settings.screen_middle[1]+75, 250, 50,
-                                 self.settings.colors["green"],
+                                 self.settings.colors["metal"],
                                  "Exit", self.screen)
 
     def run(self):

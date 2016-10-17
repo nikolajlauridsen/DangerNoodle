@@ -4,6 +4,7 @@ from game.settings import Settings
 from game.player import Player
 from game.food import Food
 from game.ui import *
+from game.highscore import DbHandler
 import game.events as event_handler
 
 
@@ -24,12 +25,15 @@ def main():
     # Running flags
     app_running = True
 
+    # Highscore DB
+    db = DbHandler()
+
     # Menus
     main_menu = MainMenu(screen, settings, clock)
-    death_menu = DeathScreen(screen, settings, clock)
+    death_menu = DeathScreen(screen, settings, clock, db)
     pause_screen = PauseScreen(screen, settings, clock)
     settings_menu = SettingsMenu(screen, settings, clock)
-    high_score = HighScore(screen, settings, clock)
+    high_score = HighScore(screen, settings, clock, db)
 
     # Game score for game loop
     score = StringWriter(screen, "Score: " + str(settings.score), 35,
