@@ -5,7 +5,7 @@ import sys
 def check_events(player, settings):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            sys.exit("Game exited by user.")
+            sys.exit()
 
         elif event.type == pygame.KEYDOWN:
             check_keydown_event(event, player, settings)

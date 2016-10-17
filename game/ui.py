@@ -3,7 +3,7 @@ import pygame
 import sys
 
 
-class StringWriter():
+class StringWriter:
     """Class for drawing generic text to the screen"""
     def __init__(self, screen, string, size, x, y, color = (0, 0, 0)):
         self.screen = screen
@@ -90,7 +90,7 @@ class MainMenu:
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                sys.exit('Game exited by user.')
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if self.play_button.pressed(event):
                     self.settings.main_menu = False
@@ -99,7 +99,7 @@ class MainMenu:
                     self.settings.main_menu = False
                     self.settings.settings_menu = True
                 elif self.exit_button.pressed(event):
-                    sys.exit('Game exited by user.')
+                    sys.exit()
 
 
 class DeathScreen:
@@ -148,7 +148,7 @@ class DeathScreen:
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                sys.exit('Game exited by user.')
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if self.retry_yes.pressed(event):
                     self.settings.game_running = True
@@ -169,7 +169,16 @@ class PauseScreen:
         # Strings
         self.title = StringWriter(self.screen, "Game Paused", 70,
                                   self.settings.screen_middle[0],
-                                  self.settings.screen_middle[1])
+                                  self.settings.screen_middle[1]-150)
+
+        self.menu_button = Button(self.settings.screen_middle[0],
+                                  self.settings.screen_middle[1]+175,
+                                  200, 50, self.settings.colors["metal"],
+                                  "Exit to menu", self.screen)
+        self.resume_button = Button(self.settings.screen_middle[0],
+                                    self.settings.screen_middle[1]+100,
+                                    200, 50, self.settings.colors["metal"],
+                                    "Resume", self.screen)
 
     def run(self, player, food_sprite, score):
         while self.settings.game_paused:
@@ -178,6 +187,8 @@ class PauseScreen:
             food_sprite.draw(self.screen)
             score.draw()
             self.title.draw()
+            self.menu_button.draw_button()
+            self.resume_button.draw_button()
             self.check_events()
             self.clock.tick(60)
             pygame.display.flip()
@@ -188,6 +199,13 @@ class PauseScreen:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    self.settings.game_paused = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if self.menu_button.pressed(event):
+                    self.settings.game_running = False
+                    self.settings.game_paused = False
+                    self.settings.main_menu = True
+                elif self.resume_button.pressed(event):
                     self.settings.game_paused = False
 
 
@@ -286,7 +304,7 @@ class SettingsMenu:
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                sys.exit("Game exited by user")
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if self.exit_button.pressed(event):
                     self.settings.settings_menu = False
