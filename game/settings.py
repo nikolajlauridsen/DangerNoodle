@@ -30,3 +30,4 @@ class Settings:
         self.game_running = False
         self.settings_menu = False
         self.game_paused = False
+        self.high_score = False

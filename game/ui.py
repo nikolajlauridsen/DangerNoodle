@@ -1,5 +1,6 @@
 """UI objects like StringWriter and Buttons as well as menu classes"""
 import pygame
+from game.highscore import DbHandler
 import sys
 
 
@@ -62,15 +63,26 @@ class MainMenu:
         self.screen = screen
         self.settings = settings
         self.clock = clock
-        self.play_button = Button(settings.screen_middle[0],
-                                  settings.screen_middle[1], 200, 50,
-                                  settings.colors["metal"], "Play", screen)
-        self.settings_button = Button(settings.screen_middle[0],
-                                      settings.screen_middle[1]+75, 200, 50,
-                                      settings.colors["metal"], "Settings", screen)
+        self.play_button = Button(self.settings.screen_middle[0],
+                                  self.settings.screen_middle[1], 200, 50,
+                                  self.settings.colors["metal"], "Play",
+                                  self.screen)
+
+        self.settings_button = Button(self.settings.screen_middle[0],
+                                      self.settings.screen_middle[1]+75, 200, 50,
+                                      self.settings.colors["metal"], "Settings", screen)
+
+        self.high_score_button = Button(self.settings.screen_middle[0],
+                                        self.settings.screen_middle[1]+150,
+                                        200, 50, self.settings.colors["metal"],
+                                        "High Score", screen)
+
         self.exit_button = Button(settings.screen_middle[0],
-                                  settings.screen_middle[1]+150, 200, 50,
-                                  settings.colors["metal"], "Exit", screen)
+                                  self.settings.screen_middle[1] + 225, 200,
+                                  50,
+                                  self.settings.colors["metal"], "Exit",
+                                  screen)
+
         self.heading = StringWriter(screen, "Danger Noodle", 75,
                                     self.settings.screen_middle[0],
                                     (self.settings.screen_middle[1]) - 200,
@@ -82,6 +94,7 @@ class MainMenu:
             self.play_button.draw_button()
             self.settings_button.draw_button()
             self.exit_button.draw_button()
+            self.high_score_button.draw_button()
             self.heading.draw()
             self.check_events()
             self.clock.tick(60)
@@ -98,6 +111,9 @@ class MainMenu:
                 elif self.settings_button.pressed(event):
                     self.settings.main_menu = False
                     self.settings.settings_menu = True
+                elif self.high_score_button.pressed(event):
+                    self.settings.high_score = True
+                    self.settings.main_menu = False
                 elif self.exit_button.pressed(event):
                     sys.exit()
 
@@ -207,6 +223,57 @@ class PauseScreen:
                     self.settings.main_menu = True
                 elif self.resume_button.pressed(event):
                     self.settings.game_paused = False
+
+class HighScore:
+    def __init__(self, screen, settings, clock):
+        self.screen = screen
+        self.settings = settings
+        self.clock = clock
+        self.db = DbHandler()
+        self.high_scores = self.db.get_highscore()
+        self.high_score_labesls = []
+        self.create_labels()
+        self.backup_label = StringWriter(self.screen, "No high scores",
+                                         50, self.settings.screen_middle[0],
+                                         self.settings.screen_middle[1])
+        self.title = StringWriter(self.screen, "High Scores",
+                                  50, self.settings.screen_middle[0],
+                                  self.settings.screen_middle[1]-275)
+        self.main_menu_button = Button(self.settings.screen_middle[0],
+                                       self.settings.screen_middle[1]+300,
+                                       200, 50, self.settings.colors["metal"],
+                                       "Main Menu", self.screen)
+
+    def create_labels(self):
+        for i, high_Score in enumerate(self.high_scores):
+            text = str(high_Score["name"]) + ":      " + str(high_Score["score"])
+            label = StringWriter(self.screen, text, 25,
+                                self.settings.screen_middle[0],
+                                self.settings.screen_middle[1] + (30*i))
+            self.high_score_labesls.append(label)
+
+    def run(self):
+        while self.settings.high_score:
+            self.screen.fill(self.settings.colors["grey"])
+            self.title.draw()
+            self.main_menu_button.draw_button()
+            if len(self.high_score_labesls) > 0:
+                for label in self.high_score_labesls:
+                    label.draw()
+            else:
+                self.backup_label.draw()
+            self.check_events()
+            self.clock.tick(60)
+            pygame.display.flip()
+
+    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.main_menu_button.pressed(event):
+                    self.settings.high_score = False
+                    self.settings.main_menu = True
 
 
 class SettingsMenu:

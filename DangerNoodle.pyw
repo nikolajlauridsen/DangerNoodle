@@ -29,6 +29,7 @@ def main():
     death_menu = DeathScreen(screen, settings, clock)
     pause_screen = PauseScreen(screen, settings, clock)
     settings_menu = SettingsMenu(screen, settings, clock)
+    high_score = HighScore(screen, settings, clock)
 
     # Game score for game loop
     score = StringWriter(screen, "Score: " + str(settings.score), 35,
@@ -40,6 +41,7 @@ def main():
         main_menu.run()
         settings_menu.run()
         death_menu.run()
+        high_score.run()
 
         if settings.game_running:
             # Create or recreate sprites and reset score
