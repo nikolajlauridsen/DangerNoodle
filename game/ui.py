@@ -7,7 +7,7 @@ class StringWriter():
     """Class for drawing generic text to the screen"""
     def __init__(self, screen, string, size, x, y, color = (0, 0, 0)):
         self.screen = screen
-        self.font = pygame.font.Font(None, size)  # Create font with desired size
+        self.font = pygame.font.Font("freesansbold.ttf", size)  # Create font with desired size
         self.text = self.font.render(string, 1, color)  # Create a text "sprite"
         self.text_rect = self.text.get_rect()  # get it's rect
         self.text_rect.centerx = x  # and set it's location
@@ -62,17 +62,18 @@ class MainMenu:
         self.screen = screen
         self.settings = settings
         self.clock = clock
-        play_button_x = settings.screen_size[0]//2
-        play_button_y = settings.screen_size[1]//2
-        self.play_button = Button(play_button_x, play_button_y, 200, 50,
+        self.play_button = Button(settings.screen_middle[0],
+                                  settings.screen_middle[1], 200, 50,
                                   settings.colors["metal"], "Play", screen)
-        self.settings_button = Button(play_button_x, play_button_y+75, 200, 50,
+        self.settings_button = Button(settings.screen_middle[0],
+                                      settings.screen_middle[1]+75, 200, 50,
                                       settings.colors["metal"], "Settings", screen)
-        self.exit_button = Button(play_button_x, play_button_y+150, 200, 50,
+        self.exit_button = Button(settings.screen_middle[0],
+                                  settings.screen_middle[1]+150, 200, 50,
                                   settings.colors["metal"], "Exit", screen)
         self.heading = StringWriter(screen, "Danger Noodle", 75,
-                                    self.settings.screen_size[0] // 2,
-                                    (self.settings.screen_size[1] // 2) - 200,
+                                    self.settings.screen_middle[0],
+                                    (self.settings.screen_middle[1]) - 200,
                                     color=self.settings.colors["green"])
 
     def run(self):
@@ -107,26 +108,26 @@ class DeathScreen:
         self.settings = settings
         self.clock = clock
         # Strings
-        self.heading_string = StringWriter(self.screen, "Game over!", 75,
-                                           self.settings.screen_size[0]//2,
-                                           (self.settings.screen_size[1]//2)-200)
+        self.heading_string = StringWriter(self.screen, "Game over!", 70,
+                                           self.settings.screen_middle[0],
+                                           self.settings.screen_middle[1]-250)
 
         self.score_string = StringWriter(self.screen,
                                          "Final Score: " + str(self.settings.score),
-                                         50, self.settings.screen_size[0]//2,
-                                         self.settings.screen_size[1]//2-125)
+                                         45, self.settings.screen_middle[0],
+                                         self.settings.screen_middle[1]-175)
 
-        self.retry_string = StringWriter(self.screen, "Retry?", 50,
-                                         self.settings.screen_size[0] // 2,
-                                         (self.settings.screen_size[1] // 2) - 50)
+        self.retry_string = StringWriter(self.screen, "Retry?", 40,
+                                         self.settings.screen_middle[0],
+                                         (self.settings.screen_middle[1]) - 0)
 
         # Buttons
-        self.retry_yes = Button(self.settings.screen_size[0] // 2 - 150,
-                                self.settings.screen_size[1] // 2 + 25, 250, 50,
+        self.retry_yes = Button(self.settings.screen_middle[0] - 150,
+                                self.settings.screen_middle[1] + 75, 250, 50,
                                 self.settings.colors["green"],
                                 "Yes", self.screen)
-        self.retry_no = Button(self.settings.screen_size[0] // 2 + 150,
-                               self.settings.screen_size[1] // 2 + 25, 250, 50,
+        self.retry_no = Button(self.settings.screen_middle[0] + 150,
+                               self.settings.screen_middle[1] + 75, 250, 50,
                                self.settings.colors["green"],
                                "No", self.screen)
 
@@ -168,63 +169,63 @@ class SettingsMenu:
 
         # Strings
         # Snake Size
-        self.snake_size_title = StringWriter(self.screen, "Start size:", 30,
-                                             self.settings.screen_size[0]//2,
-                                             self.settings.screen_size[1]//2-40)
+        self.snake_size_title = StringWriter(self.screen, "Start size:", 25,
+                                             self.settings.screen_middle[0],
+                                             self.settings.screen_middle[1]-40)
         self.snake_size = StringWriter(self.screen,
-                                       str(self.settings.snake_size), 25,
-                                       self.settings.screen_size[0]//2,
-                                       self.settings.screen_size[1]//2)
+                                       str(self.settings.snake_size), 20,
+                                       self.settings.screen_middle[0],
+                                       self.settings.screen_middle[1])
         # starting speed
-        self.start_speed_title = StringWriter(self.screen, "Start speed:", 30,
-                                              self.settings.screen_size[0] // 2,
-                                              self.settings.screen_size[1] // 2 - 140)
+        self.start_speed_title = StringWriter(self.screen, "Start speed:", 25,
+                                              self.settings.screen_middle[0],
+                                              self.settings.screen_middle[1] - 140)
         self.start_speed = StringWriter(self.screen,
-                                        str(self.settings.start_speed), 25,
-                                        self.settings.screen_size[0] // 2,
-                                        self.settings.screen_size[1] // 2-80)
+                                        str(self.settings.start_speed), 20,
+                                        self.settings.screen_middle[0],
+                                        self.settings.screen_middle[1]-90)
 
         # Buttons
         # -------Snake Size Buttons-------
-        self.snake_size_plus = Button(self.settings.screen_size[0]//2+100,
-                                     self.settings.screen_size[1]//2, 50, 50,
+        self.snake_size_plus = Button(self.settings.screen_middle[0]+100,
+                                     self.settings.screen_middle[1], 50, 50,
                                      self.settings.colors["green"],
                                      "+", self.screen)
-        self.snake_size_plus_five = Button(self.settings.screen_size[0]//2+160,
-                                     self.settings.screen_size[1]//2, 50, 50,
+        self.snake_size_plus_five = Button(self.settings.screen_middle[0]+160,
+                                     self.settings.screen_middle[1], 50, 50,
                                      self.settings.colors["green"],
                                      "+5", self.screen)
-        self.snake_size_minus = Button(self.settings.screen_size[0] // 2-100,
-                                      self.settings.screen_size[1] // 2, 50, 50,
+        self.snake_size_minus = Button(self.settings.screen_middle[0]-100,
+                                      self.settings.screen_middle[1], 50, 50,
                                       self.settings.colors["green"],
                                       "-", self.screen)
-        self.snake_size_minus_five = Button(self.settings.screen_size[0] // 2 - 160,
-                                       self.settings.screen_size[1] // 2, 50,
+        self.snake_size_minus_five = Button(self.settings.screen_middle[0] - 160,
+                                       self.settings.screen_middle[1], 50,
                                        50,
                                        self.settings.colors["green"],
                                        "-5", self.screen)
         # Start Speed Buttons
-        self.start_speed_plus = Button(self.settings.screen_size[0] // 2 + 100,
-                                       self.settings.screen_size[1] // 2 - 80, 50,
+        self.start_speed_plus = Button(self.settings.screen_middle[0] + 100,
+                                       self.settings.screen_middle[1] - 90, 50,
                                        50,
                                        self.settings.colors["green"],
                                        "+", self.screen)
-        self.start_speed_plus_five = Button(self.settings.screen_size[0] // 2 + 160,
-                                           self.settings.screen_size[1] // 2 - 80, 50, 50,
+        self.start_speed_plus_five = Button(self.settings.screen_middle[0] + 160,
+                                           self.settings.screen_middle[1] - 90, 50, 50,
                                            self.settings.colors["green"],
                                            "+5", self.screen)
-        self.start_speed_minus = Button(self.settings.screen_size[0] // 2 - 100,
-                                       self.settings.screen_size[1] // 2 - 80, 50,
+        self.start_speed_minus = Button(self.settings.screen_middle[0] - 100,
+                                       self.settings.screen_middle[1] - 90, 50,
                                        50,
                                        self.settings.colors["green"],
                                        "-", self.screen)
-        self.start_speed_minus_five = Button(self.settings.screen_size[0] // 2 - 160,
-                                             self.settings.screen_size[1] // 2 - 80, 50,
+        self.start_speed_minus_five = Button(self.settings.screen_middle[0] - 160,
+                                             self.settings.screen_middle[1] - 90, 50,
                                              50,
                                              self.settings.colors["green"],
                                              "-5", self.screen)
-        self.exit_button = Button(self.settings.screen_size[0]//2,
-                                 self.settings.screen_size[1]//2+75, 250, 50,
+        self.exit_button = Button(self.settings.screen_middle[0],
+                                 self.settings.screen_middle[1]+75, 250, 50,
                                  self.settings.colors["green"],
                                  "Exit", self.screen)
 

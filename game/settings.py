@@ -13,6 +13,7 @@ class Settings:
 
         # Window options
         self.screen_size = [1280, 720]
+        self.screen_middle = [self.screen_size[0]//2, self.screen_size[1]//2]
 
         # Player options
         self.snake_size = 25
