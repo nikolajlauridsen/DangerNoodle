@@ -161,6 +161,36 @@ class DeathScreen:
                     self.settings.score = 0
 
 
+class PauseScreen:
+    def __init__(self, screen, settings, clock):
+        self.screen = screen
+        self.settings = settings
+        self.clock = clock
+        # Strings
+        self.title = StringWriter(self.screen, "Game Paused", 70,
+                                  self.settings.screen_middle[0],
+                                  self.settings.screen_middle[1])
+
+    def run(self, player, food_sprite, score):
+        while self.settings.game_paused:
+            self.screen.fill(self.settings.colors["grey"])
+            player.draw(self.screen)
+            food_sprite.draw(self.screen)
+            score.draw()
+            self.title.draw()
+            self.check_events()
+            self.clock.tick(60)
+            pygame.display.flip()
+
+    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.settings.game_paused = False
+
+
 class SettingsMenu:
     def __init__(self, screen, settings, clock):
         self.screen = screen

@@ -27,6 +27,7 @@ def main():
     # Menus
     main_menu = MainMenu(screen, settings, clock)
     death_menu = DeathScreen(screen, settings, clock)
+    pause_screen = PauseScreen(screen, settings, clock)
     settings_menu = SettingsMenu(screen, settings, clock)
 
     # Game score for game loop
@@ -49,22 +50,22 @@ def main():
             player.go_down()
             food_sprite = pygame.sprite.GroupSingle(Food(screen, settings))
         while settings.game_running:
+            # If pasuse flag is true jump into pause_screen
+            pause_screen.run(player, food_sprite, score)
             # Game loop
             # Handle events
             event_handler.check_events(player, settings)
+            # Fill the screen and redraw objects
+            screen.fill(settings.colors["grey"])
+            food_sprite.sprite.collision_detect(player, food_sprite, score)
+            player.update()
+            player.draw(screen)
+            food_sprite.draw(screen)
+            score.draw()
             # Wait for clock
             clock.tick(settings.start_speed + (settings.score // 4))
-            # Fill the screen and redraw objects
-            if not settings.game_paused:
-                screen.fill(settings.colors["grey"])
-                food_sprite.sprite.collision_detect(player, food_sprite, score)
-                player.update()
-                player.draw(screen)
-                food_sprite.draw(screen)
-                score.draw()
-
-                # Refresh the screen
-                pygame.display.flip()
+            # Refresh the screen
+            pygame.display.flip()
 
     pygame.quit()
 
