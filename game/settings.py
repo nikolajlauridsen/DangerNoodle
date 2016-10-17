@@ -1,5 +1,3 @@
-import pygame
-
 class Settings:
 
     def __init__(self):
@@ -12,7 +10,12 @@ class Settings:
         }
 
         # Window options
-        self.screen_size = [1280, 720]
+        # Screen size is a bit weird because it must fall on this line
+        # y = (player.segment_size + player.segment_margin) * x + play.segment_margin
+        # Where x is the desired amount of segments "space" on the scree
+        # and y is the required amount of pixels
+        # IE: 23 * 31 + 3 = 716 (so the screen is 31 segments tall)
+        self.screen_size = [1268, 716]
         self.screen_middle = [self.screen_size[0]//2, self.screen_size[1]//2]
 
         # Player options
