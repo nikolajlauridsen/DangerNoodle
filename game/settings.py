@@ -22,6 +22,7 @@ class Settings:
         self.snake_size = 25
         self.start_speed = 10
 
+        # Game score
         self.score = 0
 
         # Running flags

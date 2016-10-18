@@ -30,6 +30,7 @@ class StringWriter:
 
 
 class StringInputField:
+    """Input field class for capturing input from the keyboard"""
     def __init__(self, screen, settings, x, y, limit=20,
                  default_text="Click to write...",
                  background_color=(255, 255, 255), width=500, height=50,
@@ -98,6 +99,7 @@ class StringInputField:
 
 
 class Button:
+    """Button class for creating buttons"""
     def __init__(self, x, y, width, height, color, text, screen, border=6,
                  border_color=(0, 0, 0)):
         self.screen = screen
@@ -132,6 +134,7 @@ class Button:
 
 
 class MainMenu:
+    """Class for the main menu of the game"""
     def __init__(self, screen, settings, clock):
         self.screen = screen
         self.settings = settings
@@ -192,6 +195,7 @@ class MainMenu:
 
 
 class DeathScreen:
+    """Menu class for the deathscreen displayed when you die"""
     def __init__(self, screen, settings, clock, db):
         self.screen = screen
         self.settings = settings
@@ -276,6 +280,7 @@ class DeathScreen:
 
 
 class PauseScreen:
+    """Menu class for the pause screen of the game"""
     def __init__(self, screen, settings, clock):
         self.screen = screen
         self.settings = settings
@@ -325,6 +330,7 @@ class PauseScreen:
 
 
 class HighScore:
+    """Menu class for the high score menu"""
     def __init__(self, screen, settings, clock, db):
         self.screen = screen
         self.settings = settings
@@ -401,6 +407,7 @@ class HighScore:
 
 
 class SettingsMenu:
+    """Menu class for the settings menu of the game"""
     def __init__(self, screen, settings, clock):
         self.screen = screen
         self.settings = settings
