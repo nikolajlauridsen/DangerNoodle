@@ -1,4 +1,4 @@
-"""UI objects like StringWriter and Buttons as well as menu classes"""
+"""UI classes like StringWriter and Buttons"""
 import pygame
 
 import sys

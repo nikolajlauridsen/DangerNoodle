@@ -24,6 +24,7 @@ class Settings:
 
         # Game score
         self.score = 0
+        self.max_speed = 80
 
         # Running flags
         self.main_menu = True

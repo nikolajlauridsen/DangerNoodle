@@ -73,7 +73,10 @@ def main():
             food_sprite.draw(screen)
             score.draw()
             # Wait for clock
-            clock.tick(settings.start_speed + (settings.score // 4))
+            if settings.score <= settings.max_speed:
+                clock.tick(settings.start_speed + (settings.score // 4))
+            else:
+                clock.tick(settings.start_speed + (settings.max_speed // 4))
             # Refresh the screen
             pygame.display.flip()
 

@@ -1,3 +1,4 @@
+"""Menu classes"""
 from game.ui import *
 
 
@@ -283,13 +284,24 @@ class SettingsMenu:
 
         # Strings
         # Snake Size
+        self.title = StringWriter(self.screen, "Settings", 50,
+                                  self.settings.screen_middle[0],
+                                  self.settings.screen_middle[1]-300)
         self.snake_size_title = StringWriter(self.screen, "Start size:", 25,
                                              self.settings.screen_middle[0],
                                              self.settings.screen_middle[1]-40)
         self.snake_size = StringWriter(self.screen,
                                        str(self.settings.snake_size), 20,
                                        self.settings.screen_middle[0],
-                                       self.settings.screen_middle[1])
+                                       self.settings.screen_middle[1]+10)
+        # Max speed
+        self.max_speed_title = StringWriter(self.screen, "Max Speed:", 25,
+                                             self.settings.screen_middle[0],
+                                             self.settings.screen_middle[1] + 60)
+        self.max_speed = StringWriter(self.screen,
+                                      str(self.settings.max_speed), 20,
+                                      self.settings.screen_middle[0],
+                                      self.settings.screen_middle[1] + 110)
         # starting speed
         self.start_speed_title = StringWriter(self.screen, "Start speed:", 25,
                                               self.settings.screen_middle[0],
@@ -302,19 +314,21 @@ class SettingsMenu:
         # Buttons
         # -------Snake Size Buttons-------
         self.snake_size_plus = Button(self.settings.screen_middle[0]+100,
-                                     self.settings.screen_middle[1], 50, 50,
-                                     self.settings.colors["metal"],
-                                     "+", self.screen)
-        self.snake_size_plus_five = Button(self.settings.screen_middle[0]+160,
-                                     self.settings.screen_middle[1], 50, 50,
-                                     self.settings.colors["metal"],
-                                     "+5", self.screen)
-        self.snake_size_minus = Button(self.settings.screen_middle[0]-100,
-                                      self.settings.screen_middle[1], 50, 50,
+                                      self.settings.screen_middle[1]+10, 50, 50,
                                       self.settings.colors["metal"],
-                                      "-", self.screen)
+                                      "+", self.screen)
+        self.snake_size_plus_five = Button(self.settings.screen_middle[0]+160,
+                                           self.settings.screen_middle[1]+10,
+                                           50, 50,
+                                           self.settings.colors["metal"],
+                                           "+5", self.screen)
+        self.snake_size_minus = Button(self.settings.screen_middle[0]-100,
+                                       self.settings.screen_middle[1]+10,
+                                       50, 50,
+                                       self.settings.colors["metal"],
+                                       "-", self.screen)
         self.snake_size_minus_five = Button(self.settings.screen_middle[0] - 160,
-                                       self.settings.screen_middle[1], 50,
+                                       self.settings.screen_middle[1]+10, 50,
                                        50,
                                        self.settings.colors["metal"],
                                        "-5", self.screen)
@@ -338,14 +352,38 @@ class SettingsMenu:
                                              50,
                                              self.settings.colors["metal"],
                                              "-5", self.screen)
+
+        # Max speed buttons
+        self.max_speed_plus = Button(self.settings.screen_middle[0] + 100,
+                                      self.settings.screen_middle[1] + 110, 50,
+                                      50,
+                                      self.settings.colors["metal"],
+                                      "+", self.screen)
+        self.max_speed_plus_five = Button(self.settings.screen_middle[0] + 160,
+                                     self.settings.screen_middle[1] + 110, 50,
+                                     50,
+                                     self.settings.colors["metal"],
+                                     "+5", self.screen)
+        self.max_speed_minus = Button(self.settings.screen_middle[0] - 100,
+                                     self.settings.screen_middle[1] + 110, 50,
+                                     50,
+                                     self.settings.colors["metal"],
+                                     "-", self.screen)
+        self.max_speed_minus_five = Button(self.settings.screen_middle[0] - 160,
+                                     self.settings.screen_middle[1] + 110, 50,
+                                     50,
+                                     self.settings.colors["metal"],
+                                     "-5", self.screen)
+
         self.exit_button = Button(self.settings.screen_middle[0],
-                                 self.settings.screen_middle[1]+75, 250, 50,
+                                 self.settings.screen_middle[1]+200, 250, 50,
                                  self.settings.colors["metal"],
                                  "Exit", self.screen)
 
     def run(self):
         while self.settings.settings_menu:
             self.screen.fill(self.settings.colors["grey"])
+            self.title.draw()
             # Snake size elements
             self.snake_size_title.draw()
             self.snake_size.draw()
@@ -360,6 +398,13 @@ class SettingsMenu:
             self.start_speed_plus_five.draw_button()
             self.start_speed_minus.draw_button()
             self.start_speed_minus_five.draw_button()
+            # Max speed elements
+            self.max_speed.draw()
+            self.max_speed_title.draw()
+            self.max_speed_minus.draw_button()
+            self.max_speed_minus_five.draw_button()
+            self.max_speed_plus.draw_button()
+            self.max_speed_plus_five.draw_button()
             # Exit elements
             self.exit_button.draw_button()
             self.check_events()
@@ -410,3 +455,24 @@ class SettingsMenu:
                 elif self.start_speed_minus_five.pressed(event):
                     self.settings.start_speed -= 5
                     self.start_speed.update_text(str(self.settings.start_speed))
+
+                    # Max speed events
+                elif self.max_speed_plus.pressed(event):
+                    self.settings.max_speed += 1
+                    self.max_speed.update_text(
+                        str(self.settings.max_speed))
+
+                elif self.max_speed_plus_five.pressed(event):
+                    self.settings.max_speed += 5
+                    self.max_speed.update_text(
+                        str(self.settings.max_speed))
+
+                elif self.max_speed_minus.pressed(event):
+                    self.settings.max_speed -= 1
+                    self.max_speed.update_text(
+                        str(self.settings.max_speed))
+
+                elif self.max_speed_minus_five.pressed(event):
+                    self.settings.max_speed -= 5
+                    self.max_speed.update_text(
+                        str(self.settings.max_speed))
