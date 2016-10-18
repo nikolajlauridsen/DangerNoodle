@@ -30,7 +30,7 @@ class StringWriter:
 
 
 class StringInput:
-    def __init__(self, screen, settings, x, y, limit=15,
+    def __init__(self, screen, settings, x, y, limit=20,
                  default_text="Click to write...",
                  background_color=(255, 255, 255), width=500, height=50,
                  text_color=(0, 0, 0), border=6, border_color=(0, 0, 0)):
@@ -63,9 +63,11 @@ class StringInput:
     def capture(self, event):
         if self.capturing:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_DOWN:
+                if event.key == pygame.K_ESCAPE and self.capturing:
                     self.capturing = False
-                elif len(self.keyboard_input) < self.limit:
+                elif event.key == pygame.K_BACKSPACE and len(self.keyboard_input) > 0:
+                    self.keyboard_input = self.keyboard_input[:-1]
+                elif len(self.keyboard_input) <= self.limit:
                     self.keyboard_input += event.unicode
 
     def draw_frame(self):
