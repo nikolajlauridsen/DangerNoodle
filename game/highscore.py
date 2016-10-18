@@ -14,7 +14,7 @@ class DbHandler:
 
     def get_highscore(self):
         """Return highscore as a list of dictionaries"""
-        self.c.execute("SELECT * FROM HighScore ORDER BY score DESC")
+        self.c.execute("SELECT * FROM HighScore ORDER BY score DESC LIMIT 15")
         highscore_data = self.c.fetchall()
         highscore = []
         for entry in highscore_data:

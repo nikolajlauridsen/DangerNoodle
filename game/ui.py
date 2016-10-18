@@ -29,7 +29,7 @@ class StringWriter:
         self.screen.blit(self.text, self.text_rect)
 
 
-class StringInput:
+class StringInputField:
     def __init__(self, screen, settings, x, y, limit=20,
                  default_text="Click to write...",
                  background_color=(255, 255, 255), width=500, height=50,
@@ -225,9 +225,9 @@ class DeathScreen:
                                       self.settings.screen_middle[1],
                                       250, 50, self.settings.colors["metal"],
                                       "Save highscore", self.screen)
-        self.input = StringInput(self.screen, self.settings,
-                                 self.settings.screen_middle[0],
-                                 self.settings.screen_middle[1]-75)
+        self.input = StringInputField(self.screen, self.settings,
+                                      self.settings.screen_middle[0],
+                                      self.settings.screen_middle[1] - 75)
 
     def run(self):
         while self.settings.death_menu:
@@ -329,35 +329,58 @@ class HighScore:
         self.settings = settings
         self.clock = clock
         self.db = db
-        self.high_scores = self.db.get_highscore()
-        self.high_score_labesls = []
+        self.high_scores = []
+        self.high_score_labels = []
         self.create_labels()
         self.backup_label = StringWriter(self.screen, "No high scores",
                                          50, self.settings.screen_middle[0],
                                          self.settings.screen_middle[1])
         self.title = StringWriter(self.screen, "High Scores",
                                   50, self.settings.screen_middle[0],
-                                  self.settings.screen_middle[1]-275)
+                                  self.settings.screen_middle[1]-300)
         self.main_menu_button = Button(self.settings.screen_middle[0],
                                        self.settings.screen_middle[1]+300,
                                        200, 50, self.settings.colors["metal"],
                                        "Main Menu", self.screen)
 
     def create_labels(self):
+        """Create text labels"""
+        # Make title labels and add to list
+        name_titel = StringWriter(self.screen, "Name", 35,
+                                self.settings.screen_middle[0] - 200,
+                                self.settings.screen_middle[1] - 250)
+        score_title = StringWriter(self.screen, "Score", 35,
+                                   self.settings.screen_middle[0] + 200,
+                                   self.settings.screen_middle[1] - 250)
+        self.high_score_labels.append(name_titel)
+        self.high_score_labels.append(score_title)
+        # for every entry in highscores make a label and add it to list
         for i, high_Score in enumerate(self.high_scores):
-            text = str(high_Score["name"]) + ":      " + str(high_Score["score"])
-            label = StringWriter(self.screen, text, 25,
-                                self.settings.screen_middle[0],
-                                self.settings.screen_middle[1] + (30*i))
-            self.high_score_labesls.append(label)
+            name = high_Score["name"]
+            score = str(high_Score["score"])
+            name_label = StringWriter(self.screen, name, 25,
+                                self.settings.screen_middle[0] - 200,
+                                self.settings.screen_middle[1] + (30*i) - 200)
+            score_label = StringWriter(self.screen, score, 25,
+                                       self.settings.screen_middle[0] + 200,
+                                       self.settings.screen_middle[1] + (30*i) - 200)
+            self.high_score_labels.append(name_label)
+            self.high_score_labels.append(score_label)
+
+    def populate_high_score(self):
+        """Get high scores from db and make labels"""
+        self.high_scores = self.db.get_highscore()
+        self.create_labels()
 
     def run(self):
         while self.settings.high_score:
+            if len(self.high_scores) < 1:
+                self.populate_high_score()
             self.screen.fill(self.settings.colors["grey"])
             self.title.draw()
             self.main_menu_button.draw_button()
-            if len(self.high_score_labesls) > 0:
-                for label in self.high_score_labesls:
+            if len(self.high_score_labels) > 0:
+                for label in self.high_score_labels:
                     label.draw()
             else:
                 self.backup_label.draw()
@@ -371,6 +394,7 @@ class HighScore:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.main_menu_button.pressed(event):
+                    self.high_scores = []
                     self.settings.high_score = False
                     self.settings.main_menu = True
 
