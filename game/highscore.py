@@ -1,5 +1,4 @@
 import sqlite3 as lite
-import os
 
 class DbHandler:
     def __init__(self):

@@ -298,6 +298,7 @@ class PauseScreen:
         while self.settings.game_paused:
             self.screen.fill(self.settings.colors["grey"])
             player.draw(self.screen)
+            player.show_direction()
             food_sprite.draw(self.screen)
             score.draw()
             self.title.draw()

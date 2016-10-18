@@ -73,6 +73,13 @@ class Player(pygame.sprite.Sprite):
         self.snake_segments.append(segment)
         self.player_sprites.add(segment)
 
+    def show_direction(self):
+        """Show a circle displaying the direction of the player"""
+        # Set rects new coordinates
+        x = self.snake_segments[0].rect.centerx + self.change_x
+        y = self.snake_segments[0].rect.centery + self.change_y
+        pygame.draw.circle(self.screen, self.settings.colors["red"],
+                           [x, y], 10, 0)
     def go_left(self):
         self.change_y = 0
         self.change_x = (self.segment_width + self.segment_margin) * -1
