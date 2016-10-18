@@ -134,10 +134,9 @@ class Button:
 
 
 class IntSelector:
-    def __init__(self, screen, settings, x, y, title, integer,
+    def __init__(self, screen, x, y, title, integer,
                  color=(96, 130, 182), min_int=0, max_int=999):
         self.screen = screen
-        self.settings = settings
         self.title = title
         self.integer = integer
         self.x = x

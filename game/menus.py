@@ -288,19 +288,19 @@ class SettingsMenu:
                                   self.settings.screen_middle[0],
                                   self.settings.screen_middle[1]-300)
         # Int input
-        self.snake_size_input = IntSelector(self.screen, self.settings,
+        self.snake_size_input = IntSelector(self.screen,
                                             self.settings.screen_middle[0],
                                             self.settings.screen_middle[1] + 40,
                                             "Snake size:",
                                             self.settings.snake_size, min_int=2)
 
-        self.max_speed_input = IntSelector(self.screen, self.settings,
+        self.max_speed_input = IntSelector(self.screen,
                                            self.settings.screen_middle[0],
                                            self.settings.screen_middle[1] - 60,
                                            "Max Speed:", self.settings.max_speed,
                                            max_int=200)
 
-        self.start_speed_input = IntSelector(self.screen, self.settings,
+        self.start_speed_input = IntSelector(self.screen,
                                              self.settings.screen_middle[0],
                                              self.settings.screen_middle[1] - 160,
                                              "Start Speed:", self.settings.start_speed,
