@@ -3,6 +3,7 @@ import pygame
 from game.settings import Settings
 from game.player import Player
 from game.food import Food
+from game.menus import *
 from game.ui import *
 from game.highscore import DbHandler
 import game.events as event_handler
