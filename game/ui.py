@@ -131,3 +131,56 @@ class Button:
                 return True
         else:
             return False
+
+
+class IntSelector:
+    def __init__(self, screen, settings, x, y, title, integer,
+                 color=(96, 130, 182), min_int=0, max_int=999):
+        self.screen = screen
+        self.settings = settings
+        self.title = title
+        self.integer = integer
+        self.x = x
+        self.y = y
+        self.min_int = min_int
+        self.max_int = max_int
+
+        # Labels
+        self.title_label = StringWriter(self.screen, self.title, 20, x, y-50)
+        self.display = StringWriter(self.screen, str(self.integer), 20,
+                                    x, y)
+
+        # Buttons
+        # Plus
+        self.plus_button = Button(x+100, y, 50, 50, color, "+", self.screen)
+        self.plus_five_button = Button(x + 160, y, 50, 50, color, "+5",
+                                       self.screen)
+        # Minus
+        self.minus_button = Button(x - 100, y, 50, 50, color, "-", self.screen)
+        self.minus_five_button = Button(x - 160, y, 50, 50, color, "-5",
+                                        self.screen)
+
+    def get_int(self):
+        return self.integer
+
+    def draw(self):
+        self.title_label.draw()
+        self.display.draw()
+        self.plus_button.draw_button()
+        self.plus_five_button.draw_button()
+        self.minus_button.draw_button()
+        self.minus_five_button.draw_button()
+
+    def check_events(self, event):
+        if self.plus_button.pressed(event) and self.integer < self.max_int:
+            self.integer += 1
+            self.display.update_text(str(self.integer))
+        elif self.plus_five_button.pressed(event) and self.integer+5 <= self.max_int:
+            self.integer += 5
+            self.display.update_text(str(self.integer))
+        elif self.minus_button.pressed(event) and self.integer > self.min_int:
+            self.integer -= 1
+            self.display.update_text(str(self.integer))
+        elif self.minus_five_button.pressed(event) and self.integer-5 >= self.min_int:
+            self.integer -= 5
+            self.display.update_text(str(self.integer))

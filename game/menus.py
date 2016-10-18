@@ -287,124 +287,40 @@ class SettingsMenu:
         self.title = StringWriter(self.screen, "Settings", 50,
                                   self.settings.screen_middle[0],
                                   self.settings.screen_middle[1]-300)
-        self.snake_size_title = StringWriter(self.screen, "Start size:", 25,
-                                             self.settings.screen_middle[0],
-                                             self.settings.screen_middle[1]-40)
-        self.snake_size = StringWriter(self.screen,
-                                       str(self.settings.snake_size), 20,
-                                       self.settings.screen_middle[0],
-                                       self.settings.screen_middle[1]+10)
-        # Max speed
-        self.max_speed_title = StringWriter(self.screen, "Max Speed:", 25,
-                                             self.settings.screen_middle[0],
-                                             self.settings.screen_middle[1] + 60)
-        self.max_speed = StringWriter(self.screen,
-                                      str(self.settings.max_speed), 20,
-                                      self.settings.screen_middle[0],
-                                      self.settings.screen_middle[1] + 110)
-        # starting speed
-        self.start_speed_title = StringWriter(self.screen, "Start speed:", 25,
-                                              self.settings.screen_middle[0],
-                                              self.settings.screen_middle[1] - 140)
-        self.start_speed = StringWriter(self.screen,
-                                        str(self.settings.start_speed), 20,
-                                        self.settings.screen_middle[0],
-                                        self.settings.screen_middle[1]-90)
+        # Int input
+        self.snake_size_input = IntSelector(self.screen, self.settings,
+                                            self.settings.screen_middle[0],
+                                            self.settings.screen_middle[1] + 40,
+                                            "Snake size:",
+                                            self.settings.snake_size, min_int=2)
 
+        self.max_speed_input = IntSelector(self.screen, self.settings,
+                                           self.settings.screen_middle[0],
+                                           self.settings.screen_middle[1] - 60,
+                                           "Max Speed:", self.settings.max_speed,
+                                           max_int=200)
+
+        self.start_speed_input = IntSelector(self.screen, self.settings,
+                                             self.settings.screen_middle[0],
+                                             self.settings.screen_middle[1] - 160,
+                                             "Start Speed:", self.settings.start_speed,
+                                             min_int=5, max_int=60)
         # Buttons
-        # -------Snake Size Buttons-------
-        self.snake_size_plus = Button(self.settings.screen_middle[0]+100,
-                                      self.settings.screen_middle[1]+10, 50, 50,
-                                      self.settings.colors["metal"],
-                                      "+", self.screen)
-        self.snake_size_plus_five = Button(self.settings.screen_middle[0]+160,
-                                           self.settings.screen_middle[1]+10,
-                                           50, 50,
-                                           self.settings.colors["metal"],
-                                           "+5", self.screen)
-        self.snake_size_minus = Button(self.settings.screen_middle[0]-100,
-                                       self.settings.screen_middle[1]+10,
-                                       50, 50,
-                                       self.settings.colors["metal"],
-                                       "-", self.screen)
-        self.snake_size_minus_five = Button(self.settings.screen_middle[0] - 160,
-                                       self.settings.screen_middle[1]+10, 50,
-                                       50,
-                                       self.settings.colors["metal"],
-                                       "-5", self.screen)
-        # Start Speed Buttons
-        self.start_speed_plus = Button(self.settings.screen_middle[0] + 100,
-                                       self.settings.screen_middle[1] - 90, 50,
-                                       50,
-                                       self.settings.colors["metal"],
-                                       "+", self.screen)
-        self.start_speed_plus_five = Button(self.settings.screen_middle[0] + 160,
-                                           self.settings.screen_middle[1] - 90, 50, 50,
-                                           self.settings.colors["metal"],
-                                           "+5", self.screen)
-        self.start_speed_minus = Button(self.settings.screen_middle[0] - 100,
-                                       self.settings.screen_middle[1] - 90, 50,
-                                       50,
-                                       self.settings.colors["metal"],
-                                       "-", self.screen)
-        self.start_speed_minus_five = Button(self.settings.screen_middle[0] - 160,
-                                             self.settings.screen_middle[1] - 90, 50,
-                                             50,
-                                             self.settings.colors["metal"],
-                                             "-5", self.screen)
-
-        # Max speed buttons
-        self.max_speed_plus = Button(self.settings.screen_middle[0] + 100,
-                                      self.settings.screen_middle[1] + 110, 50,
-                                      50,
-                                      self.settings.colors["metal"],
-                                      "+", self.screen)
-        self.max_speed_plus_five = Button(self.settings.screen_middle[0] + 160,
-                                     self.settings.screen_middle[1] + 110, 50,
-                                     50,
-                                     self.settings.colors["metal"],
-                                     "+5", self.screen)
-        self.max_speed_minus = Button(self.settings.screen_middle[0] - 100,
-                                     self.settings.screen_middle[1] + 110, 50,
-                                     50,
-                                     self.settings.colors["metal"],
-                                     "-", self.screen)
-        self.max_speed_minus_five = Button(self.settings.screen_middle[0] - 160,
-                                     self.settings.screen_middle[1] + 110, 50,
-                                     50,
-                                     self.settings.colors["metal"],
-                                     "-5", self.screen)
-
         self.exit_button = Button(self.settings.screen_middle[0],
-                                 self.settings.screen_middle[1]+200, 250, 50,
+                                 self.settings.screen_middle[1]+300, 200, 50,
                                  self.settings.colors["metal"],
-                                 "Exit", self.screen)
+                                 "Main menu", self.screen)
 
     def run(self):
         while self.settings.settings_menu:
             self.screen.fill(self.settings.colors["grey"])
             self.title.draw()
             # Snake size elements
-            self.snake_size_title.draw()
-            self.snake_size.draw()
-            self.snake_size_plus.draw_button()
-            self.snake_size_plus_five.draw_button()
-            self.snake_size_minus.draw_button()
-            self.snake_size_minus_five.draw_button()
+            self.snake_size_input.draw()
             # Start speed elements
-            self.start_speed_title.draw()
-            self.start_speed.draw()
-            self.start_speed_plus.draw_button()
-            self.start_speed_plus_five.draw_button()
-            self.start_speed_minus.draw_button()
-            self.start_speed_minus_five.draw_button()
+            self.start_speed_input.draw()
             # Max speed elements
-            self.max_speed.draw()
-            self.max_speed_title.draw()
-            self.max_speed_minus.draw_button()
-            self.max_speed_minus_five.draw_button()
-            self.max_speed_plus.draw_button()
-            self.max_speed_plus_five.draw_button()
+            self.max_speed_input.draw()
             # Exit elements
             self.exit_button.draw_button()
             self.check_events()
@@ -412,67 +328,22 @@ class SettingsMenu:
             self.clock.tick(60)
             pygame.display.flip()
 
+    def save_settings(self):
+        self.settings.max_speed = self.max_speed_input.get_int()
+        self.settings.snake_size = self.snake_size_input.get_int()
+        self.settings.start_speed = self.start_speed_input.get_int()
+
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.max_speed_input.check_events(event)
+                self.snake_size_input.check_events(event)
+                self.start_speed_input.check_events(event)
+
                 if self.exit_button.pressed(event):
+                    self.save_settings()
                     self.settings.settings_menu = False
                     self.settings.game_running = False
                     self.settings.main_menu = True
-
-                # Snake size events
-                elif self.snake_size_plus.pressed(event):
-                    self.settings.snake_size += 1
-                    self.snake_size.update_text(str(self.settings.snake_size))
-
-                elif self.snake_size_plus_five.pressed(event):
-                    self.settings.snake_size += 5
-                    self.snake_size.update_text(str(self.settings.snake_size))
-
-                elif self.snake_size_minus.pressed(event) and self.settings.snake_size > 2:
-                    self.settings.snake_size -= 1
-                    self.snake_size.update_text(str(self.settings.snake_size))
-
-                elif self.snake_size_minus_five.pressed(event) and self.settings.snake_size > 2:
-                    self.settings.snake_size -= 5
-                    self.snake_size.update_text(str(self.settings.snake_size))
-
-                # Start speed events
-                elif self.start_speed_plus.pressed(event):
-                    self.settings.start_speed += 1
-                    self.start_speed.update_text(str(self.settings.start_speed))
-
-                elif self.start_speed_plus_five.pressed(event):
-                    self.settings.start_speed += 5
-                    self.start_speed.update_text(str(self.settings.start_speed))
-
-                elif self.start_speed_minus.pressed(event):
-                    self.settings.start_speed -= 1
-                    self.start_speed.update_text(str(self.settings.start_speed))
-
-                elif self.start_speed_minus_five.pressed(event):
-                    self.settings.start_speed -= 5
-                    self.start_speed.update_text(str(self.settings.start_speed))
-
-                    # Max speed events
-                elif self.max_speed_plus.pressed(event):
-                    self.settings.max_speed += 1
-                    self.max_speed.update_text(
-                        str(self.settings.max_speed))
-
-                elif self.max_speed_plus_five.pressed(event):
-                    self.settings.max_speed += 5
-                    self.max_speed.update_text(
-                        str(self.settings.max_speed))
-
-                elif self.max_speed_minus.pressed(event):
-                    self.settings.max_speed -= 1
-                    self.max_speed.update_text(
-                        str(self.settings.max_speed))
-
-                elif self.max_speed_minus_five.pressed(event):
-                    self.settings.max_speed -= 5
-                    self.max_speed.update_text(
-                        str(self.settings.max_speed))
