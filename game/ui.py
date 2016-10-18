@@ -39,6 +39,7 @@ class StringInput:
         self.x = x
         self.y = y
         self.limit = limit
+        self.default_text = default_text
         self.keyboard_input = default_text
         self.text_length = len(self.keyboard_input)
         self.capturing = False
@@ -70,6 +71,10 @@ class StringInput:
                 elif len(self.keyboard_input) <= self.limit:
                     self.keyboard_input += event.unicode
 
+    def restore_defaults(self):
+        self.keyboard_input = self.default_text
+        self.capturing = False
+
     def draw_frame(self):
         if self.text_length != len(self.keyboard_input):
             self.text.update_text(self.keyboard_input)
@@ -86,7 +91,7 @@ class StringInput:
                     self.keyboard_input = ""
                     self.capturing = True
             else:
-                self.capturing = False
+                self.restore_defaults()
 
         elif event.type == pygame.QUIT:
             sys.exit()
@@ -222,7 +227,7 @@ class DeathScreen:
                                       "Save highscore", self.screen)
         self.input = StringInput(self.screen, self.settings,
                                  self.settings.screen_middle[0],
-                                 self.settings.screen_middle[1]-100)
+                                 self.settings.screen_middle[1]-75)
 
     def run(self):
         while self.settings.death_menu:
@@ -251,11 +256,15 @@ class DeathScreen:
                 if self.retry_yes.pressed(event):
                     self.settings.game_running = True
                     self.settings.death_menu = False
+                    self.high_score_saved = False
+                    self.input.restore_defaults()
                     self.settings.score = 0
                 elif self.retry_no.pressed(event):
                     self.settings.main_menu = True
                     self.settings.game_running = False
                     self.settings.death_menu = False
+                    self.high_score_saved = False
+                    self.input.restore_defaults()
                     self.settings.score = 0
                 elif self.save_high_score.pressed(event) and not self.high_score_saved:
                     name = self.input.keyboard_input
