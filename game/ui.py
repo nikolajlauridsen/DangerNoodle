@@ -1,6 +1,6 @@
 """UI objects like StringWriter and Buttons as well as menu classes"""
 import pygame
-from game.highscore import DbHandler
+
 import sys
 
 
@@ -20,15 +20,22 @@ class StringWriter:
         except TypeError:
             self.text = self.font.render(str(string), 1, (0, 0, 0))
 
+    def reposition(self, x, y):
+        self.text_rect = self.text.get_rect()
+        self.text_rect.centerx = x
+        self.text_rect.centery = y
+
     def draw(self):
         self.screen.blit(self.text, self.text_rect)
 
+
 class StringInput:
-    def __init__(self, screen, settings, clock, x, y, limit=50,
-                 default_text="Click to write..."):
+    def __init__(self, screen, settings, x, y, limit=15,
+                 default_text="Click to write...",
+                 background_color=(255, 255, 255), width=500, height=50,
+                 text_color=(0, 0, 0), border=6, border_color=(0, 0, 0)):
         self.screen = screen
         self.settings = settings
-        self.clock = clock
         self.x = x
         self.y = y
         self.limit = limit
@@ -37,12 +44,21 @@ class StringInput:
         self.capturing = False
 
         # Grahpics stuff
-        self.text = StringWriter(self.screen, self.keyboard_input, 25, self.x, self.y)
-        self.image = pygame.Surface([500, 50])
-        self.image.fill((255, 255, 255))
+        # Text
+        self.text = StringWriter(self.screen, self.keyboard_input, 25,
+                                 self.x, self.y, color=text_color)
+        # Input box
+        self.image = pygame.Surface([width, height])
+        self.image.fill(background_color)
         self.rect = self.image.get_rect()
         self.rect.centerx = self.x
         self.rect.centery = self.y
+        # Border
+        self.border = pygame.Surface([width+border, height+border])
+        self.border.fill(border_color)
+        self.border_rect = self.border.get_rect()
+        self.border_rect.centerx = self.x
+        self.border_rect.centery = self.y
 
     def capture(self, event):
         if self.capturing:
@@ -55,7 +71,9 @@ class StringInput:
     def draw_frame(self):
         if self.text_length != len(self.keyboard_input):
             self.text.update_text(self.keyboard_input)
+            self.text.reposition(self.x, self.y)
             self.text_length = len(self.keyboard_input)
+        self.screen.blit(self.border, self.border_rect)
         self.screen.blit(self.image, self.rect)
         self.text.draw()
 
@@ -66,7 +84,7 @@ class StringInput:
                     self.keyboard_input = ""
                     self.capturing = True
             else:
-                pass
+                self.capturing = False
 
         elif event.type == pygame.QUIT:
             sys.exit()
@@ -200,7 +218,7 @@ class DeathScreen:
                                       self.settings.screen_middle[1],
                                       250, 50, self.settings.colors["metal"],
                                       "Save highscore", self.screen)
-        self.input = StringInput(self.screen, self.settings, self.clock,
+        self.input = StringInput(self.screen, self.settings,
                                  self.settings.screen_middle[0],
                                  self.settings.screen_middle[1]-100)
 
