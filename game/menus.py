@@ -168,12 +168,13 @@ class PauseScreen:
                                     200, 50, self.settings.colors["metal"],
                                     "Resume", self.screen)
 
-    def run(self, player, food_sprite, score):
+    def run(self, player, food_sprite, score, game_overlay):
         while self.settings.game_paused:
             self.screen.fill(self.settings.colors["grey"])
             player.draw(self.screen)
             player.show_direction()
             food_sprite.draw(self.screen)
+            game_overlay.draw()
             score.draw()
             self.title.draw()
             self.menu_button.draw_button()

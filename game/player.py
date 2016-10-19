@@ -44,10 +44,10 @@ class Player(pygame.sprite.Sprite):
                           self.segment_height, self.settings)
         # Register whether a segment hit the edge of the screen
         # If so set the position of the new segment to the other edge of the screen
-        if segment.rect.right > self.settings.screen_size[0] + self.segment_margin:
+        if segment.rect.right > self.settings.screen_size[0] - self.settings.overlay_width + self.segment_margin:
             segment.rect.left = 0 + self.segment_margin
         elif segment.rect.left < 0 - self.segment_margin:
-            segment.rect.right = self.settings.screen_size[0] - self.segment_margin
+            segment.rect.right = self.settings.screen_size[0] - self.settings.overlay_width - self.segment_margin
         elif segment.rect.bottom > self.settings.screen_size[1] + self.segment_margin:
             segment.rect.top = 0 + self.segment_margin
         elif segment.rect.top < 0 - self.segment_margin:

@@ -186,3 +186,26 @@ class IntSelector:
         elif self.minus_five_button.pressed(event) and self.integer-5 >= self.min_int:
             self.integer -= 5
             self.display.update_text(str(self.integer))
+
+
+class GameOverlay:
+    def __init__(self, screen, settings):
+        self.screen = screen
+        self.settings = settings
+
+        self.background = pygame.Surface([self.settings.overlay_width,
+                                          self.settings.screen_size[1]])
+        self.background.fill(self.settings.colors["d-grey"])
+        self.line = pygame.Surface([5, self.settings.screen_size[1]])
+
+        self.rect = self.background.get_rect()
+        self.line_rect = self.line.get_rect()
+
+        top_left_x = self.settings.screen_size[0]-self.settings.overlay_width
+        self.rect.topleft = (top_left_x, 0)
+        self.line_rect.topleft = (top_left_x, 0)
+
+    def draw(self):
+        self.screen.blit(self.background, self.rect)
+        self.screen.blit(self.line, self.line_rect)
+

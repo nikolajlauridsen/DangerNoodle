@@ -37,10 +37,11 @@ def main():
     pause_screen = PauseScreen(screen, settings, clock)
     settings_menu = SettingsMenu(screen, settings, clock)
     high_score = HighScore(screen, settings, clock, db)
+    game_overlay = GameOverlay(screen, settings)
 
     # Game score for game loop
     score = StringWriter(screen, "Score: " + str(settings.score), 35,
-                         settings.screen_size[0] - 100, 20,
+                         settings.screen_size[0] - 100, 40,
                          bold=True)
 
     # App loop
@@ -64,12 +65,13 @@ def main():
         # Game loop
         while settings.game_running:
             # If pasuse flag is true jump into pause_screen
-            pause_screen.run(player, food_sprite, score)
+            pause_screen.run(player, food_sprite, score, game_overlay)
             # Game loop
             # Handle events
             event_handler.check_events(player, settings)
             # Fill the screen and redraw objects
             screen.fill(settings.colors["grey"])
+            game_overlay.draw()
             food_sprite.sprite.collision_detect(player, food_sprite, score)
             player.update()
             player.draw(screen)
