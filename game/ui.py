@@ -6,9 +6,12 @@ import sys
 
 class StringWriter:
     """Class for drawing generic text to the screen"""
-    def __init__(self, screen, string, size, x, y, color = (0, 0, 0)):
+    def __init__(self, screen, string, size, x, y, color = (0, 0, 0), bold = False):
         self.screen = screen
-        self.font = pygame.font.Font("freesansbold.ttf", size)  # Create font with desired size
+        if not bold:
+            self.font = pygame.font.Font("Comfortaa-Regular.ttf", size)  # Create font with desired size
+        else:
+            self.font = pygame.font.Font("Comfortaa-Bold.ttf", size)
         self.text = self.font.render(string, 1, color)  # Create a text "sprite"
         self.text_rect = self.text.get_rect()  # get it's rect
         self.text_rect.centerx = x  # and set it's location

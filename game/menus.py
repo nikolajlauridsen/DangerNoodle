@@ -255,7 +255,7 @@ class HighScore:
             self.screen.fill(self.settings.colors["grey"])
             self.title.draw()
             self.main_menu_button.draw_button()
-            if len(self.high_score_labels) > 0:
+            if len(self.high_scores) > 0:
                 for label in self.high_score_labels:
                     label.draw()
             else:
@@ -271,6 +271,7 @@ class HighScore:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.main_menu_button.pressed(event):
                     self.high_scores = []
+                    self.high_score_labels = []
                     self.settings.high_score = False
                     self.settings.main_menu = True
 

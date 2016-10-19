@@ -19,6 +19,8 @@ def main():
     # Create Screen
     screen = pygame.display.set_mode(settings.screen_size)
     pygame.display.set_caption("Danger Noodle")
+    icon = pygame.image.load('logo.bmp')
+    pygame.display.set_icon(icon)
 
     # Create clock
     clock = pygame.time.Clock()
@@ -38,7 +40,8 @@ def main():
 
     # Game score for game loop
     score = StringWriter(screen, "Score: " + str(settings.score), 35,
-                         settings.screen_size[0] - 100, 20)
+                         settings.screen_size[0] - 100, 20,
+                         bold=True)
 
     # App loop
     while app_running:
