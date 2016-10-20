@@ -8,10 +8,10 @@ TODO:
 * ~~Optimize StringWriter~~
 * ~~High score~~ Nice up high score
 * Improve and restyle menus
-* Add more customizable settings
+* ~~Add more customizable settings~~
 * ~~Make directional marker in pause menu~~
-* Make status area outside play area for score, current speed
-length and so on
+* ~~Make status area outside play area for score, current speed
+length and so on~~
 * ~~Set a max limit for clock tick (it gets out of hand around 70-80 score)~~
 * properly comment code base
 

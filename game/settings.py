@@ -36,6 +36,7 @@ class Settings:
         self.settings_menu = False
         self.game_paused = False
         self.high_score = False
+        self.how_to = False
 
     def update_game_speed(self):
         if self.score <= self.max_speed:

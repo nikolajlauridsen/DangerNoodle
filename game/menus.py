@@ -22,10 +22,14 @@ class MainMenu:
                                         200, 50, self.settings.colors["metal"],
                                         "High Score", screen)
 
+        self.how_to_button = Button(self.settings.screen_middle[0],
+                                    self.settings.screen_middle[1] + 225,
+                                    200, 50, self.settings.colors["metal"],
+                                    "How to", screen)
+
         self.exit_button = Button(settings.screen_middle[0],
-                                  self.settings.screen_middle[1] + 225, 200,
-                                  50,
-                                  self.settings.colors["metal"], "Exit",
+                                  self.settings.screen_middle[1] + 300, 200,
+                                  50, self.settings.colors["metal"], "Exit",
                                   screen)
 
         self.heading = StringWriter(screen, "Danger Noodle", 75,
@@ -36,11 +40,14 @@ class MainMenu:
     def run(self):
         while self.settings.main_menu:
             self.screen.fill(self.settings.colors["grey"])
+
+            self.heading.draw()
             self.play_button.draw_button()
             self.settings_button.draw_button()
-            self.exit_button.draw_button()
             self.high_score_button.draw_button()
-            self.heading.draw()
+            self.how_to_button.draw_button()
+            self.exit_button.draw_button()
+
             self.check_events()
             self.clock.tick(60)
             pygame.display.flip()
@@ -58,6 +65,9 @@ class MainMenu:
                     self.settings.settings_menu = True
                 elif self.high_score_button.pressed(event):
                     self.settings.high_score = True
+                    self.settings.main_menu = False
+                elif self.how_to_button.pressed(event):
+                    self.settings.how_to = True
                     self.settings.main_menu = False
                 elif self.exit_button.pressed(event):
                     sys.exit()
@@ -212,8 +222,7 @@ class HighScore:
                                          50, self.settings.screen_middle[0],
                                          self.settings.screen_middle[1])
         self.title = StringWriter(self.screen, "High Scores",
-                                  50, self.settings.screen_middle[0],
-                                  self.settings.screen_middle[1]-300)
+                                  50, self.settings.screen_middle[0], 50)
         self.main_menu_button = Button(self.settings.screen_middle[0],
                                        self.settings.screen_middle[1]+300,
                                        200, 50, self.settings.colors["metal"],
@@ -286,8 +295,7 @@ class SettingsMenu:
         # Strings
         # Snake Size
         self.title = StringWriter(self.screen, "Settings", 50,
-                                  self.settings.screen_middle[0],
-                                  self.settings.screen_middle[1]-300)
+                                  self.settings.screen_middle[0], 50)
         # Int input
         self.snake_size_input = IntSelector(self.screen,
                                             self.settings.screen_middle[0],
@@ -347,4 +355,62 @@ class SettingsMenu:
                     self.save_settings()
                     self.settings.settings_menu = False
                     self.settings.game_running = False
+                    self.settings.main_menu = True
+
+
+class HowToPlay:
+    def __init__(self, screen, settings, clock):
+        self.screen = screen
+        self.settings = settings
+        self.clock = clock
+
+        # Text lables
+        self.labels = []
+        self.create_labels()
+        self.title_label = StringWriter(self.screen, "How to play", 50,
+                                        self.settings.screen_middle[0], 50)
+
+        # Buttons
+        self.exit_button = Button(self.settings.screen_middle[0],
+                                  self.settings.screen_middle[1]+300,
+                                  200, 50, self.settings.colors["metal"],
+                                  "Main Menu", self.screen)
+
+    def create_labels(self):
+        texts = [
+            ("Move up", "W or up arrow"),
+            ("Move down", "S or down arrow"),
+            ("Move left", "A or left arrow"),
+            ("Move right", "D or right arrow"),
+            ("Pause Game", "Esc")
+        ]
+        for i, text in enumerate(texts):
+            button = StringWriter(self.screen, text[0], 25,
+                                  self.settings.screen_middle[0]-200,
+                                  i*75 + (self.settings.screen_middle[1]-150))
+            description = StringWriter(self.screen, text[1], 25,
+                                       self.settings.screen_middle[0]+200,
+                                       i*75 + (self.settings.screen_middle[1]-150))
+            self.labels.append(button)
+            self.labels.append(description)
+
+    def run(self):
+        while self.settings.how_to:
+            self.screen.fill(self.settings.colors["grey"])
+            # Draw labels
+            self.title_label.draw()
+            for label in self.labels:
+                label.draw()
+            self.exit_button.draw_button()
+            self.clock.tick(60)
+            self.check_events()
+            pygame.display.flip()
+
+    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if self.exit_button.pressed(event):
+                    self.settings.how_to = False
                     self.settings.main_menu = True

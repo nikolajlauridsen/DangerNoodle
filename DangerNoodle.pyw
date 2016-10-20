@@ -37,6 +37,7 @@ def main():
     pause_screen = PauseScreen(screen, settings, clock)
     settings_menu = SettingsMenu(screen, settings, clock)
     high_score = HighScore(screen, settings, clock, db)
+    how_to = HowToPlay(screen, settings, clock)
     game_overlay = GameOverlay(screen, settings)
 
     # App loop
@@ -46,6 +47,7 @@ def main():
         settings_menu.run()
         death_menu.run()
         high_score.run()
+        how_to.run()
 
         # If the game_running flag is true reset playing field and create
         # game options
