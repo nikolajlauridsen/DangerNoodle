@@ -1,5 +1,6 @@
 """Menu classes"""
 from game.ui import *
+import pygame
 
 
 class MainMenu:
@@ -130,12 +131,21 @@ class DeathScreen:
 
     def check_events(self):
         for event in pygame.event.get():
-            if not self.high_score_saved:
-                self.input.check_pressed(event)
-                self.input.capture(event)
+            if event.type == pygame.KEYDOWN:
+                if not self.high_score_saved and event.key != pygame.K_RETURN:
+                    self.input.capture(event)
+                elif event.key == pygame.K_RETURN and self.input.capturing:
+                    name = self.input.keyboard_input
+                    score = self.settings.score
+                    self.db.insert_highscore(score, name)
+                    self.db.save_changes()
+                    self.high_score_saved = True
+                    self.input.keyboard_input = "Highscore Saved"
+
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.input.check_pressed(event)
                 if self.retry_yes.pressed(event):
                     self.settings.game_running = True
                     self.settings.death_menu = False
