@@ -66,13 +66,15 @@ class StringInputField:
         self.border_rect.centery = self.y
 
     def capture(self, event):
+        banned_chars = [pygame.K_BACKSPACE, pygame.K_TAB,
+                        pygame.K_KP_ENTER]
         if self.capturing:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE and self.capturing:
                     self.capturing = False
                 elif event.key == pygame.K_BACKSPACE and len(self.keyboard_input) > 0:
                     self.keyboard_input = self.keyboard_input[:-1]
-                elif len(self.keyboard_input) <= self.limit:
+                elif len(self.keyboard_input) <= self.limit and event.key not in banned_chars:
                     self.keyboard_input += event.unicode
 
     def restore_defaults(self):
