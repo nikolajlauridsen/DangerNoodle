@@ -39,11 +39,6 @@ def main():
     high_score = HighScore(screen, settings, clock, db)
     game_overlay = GameOverlay(screen, settings)
 
-    # Game score for game loop
-    score = StringWriter(screen, "Score: " + str(settings.score), 25,
-                         100, settings.overlay_width//2 - game_overlay.line.get_height(),
-                         bold=True)
-
     # App loop
     while app_running:
         # Run different menus depending on running flags in settings
@@ -57,7 +52,6 @@ def main():
         if settings.game_running:
             # Create or recreate sprites and reset score
             settings.score = 0
-            score.update_text("Score: " + str(settings.score))
             player = Player(screen, settings)
             player.create_snake()
             player.go_down()
@@ -65,23 +59,21 @@ def main():
         # Game loop
         while settings.game_running:
             # If pasuse flag is true jump into pause_screen
-            pause_screen.run(player, food_sprite, score, game_overlay)
+            pause_screen.run(player, food_sprite, game_overlay)
             # Game loop
             # Handle events
             event_handler.check_events(player, settings)
             # Fill the screen and redraw objects
             screen.fill(settings.colors["grey"])
-            game_overlay.draw()
-            food_sprite.sprite.collision_detect(player, food_sprite, score)
+            game_overlay.draw(player)
+            food_sprite.sprite.collision_detect(player, food_sprite)
             player.update()
             player.draw(screen)
             food_sprite.draw(screen)
-            score.draw()
+            # Update game speed
+            settings.update_game_speed()
             # Wait for clock
-            if settings.score <= settings.max_speed:
-                clock.tick(settings.start_speed + (settings.score // 4))
-            else:
-                clock.tick(settings.start_speed + (settings.max_speed // 4))
+            clock.tick(settings.game_speed)
             # Refresh the screen
             pygame.display.flip()
 

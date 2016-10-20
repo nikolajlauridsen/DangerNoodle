@@ -6,14 +6,14 @@ import sys
 
 class StringWriter:
     """Class for drawing generic text to the screen"""
-    def __init__(self, screen, string, size, x, y, color = (0, 0, 0), bold = False):
+    def __init__(self, screen, string, size, x, y, color=(0, 0, 0), bold = False):
         self.screen = screen
         if not bold:
             self.font = pygame.font.Font("Comfortaa-Regular.ttf", size)  # Create font with desired size
         else:
             self.font = pygame.font.Font("Comfortaa-Bold.ttf", size)
         self.text = self.font.render(string, 1, color)  # Create a text "sprite"
-        self.text_rect = self.text.get_rect()  # get it's rect
+        self.text_rect = self.text.get_rect()  # get it's background_rect
         self.text_rect.centerx = x  # and set it's location
         self.text_rect.centery = y
 
@@ -193,19 +193,57 @@ class GameOverlay:
         self.screen = screen
         self.settings = settings
 
+        self.previous_score = settings.score
+        self.previous_speed = settings.game_speed
+        self.previous_size = settings.snake_size
+
+        # Overlay background
         self.background = pygame.Surface([self.settings.screen_size[0],
                                           self.settings.overlay_width])
         self.background.fill(self.settings.colors["d-grey"])
-        self.line = pygame.Surface([self.settings.screen_size[0], 5])
+        self.background_rect = self.background.get_rect()
 
-        self.rect = self.background.get_rect()
+        # Divider line
+        self.line = pygame.Surface([self.settings.screen_size[0], 5])
         self.line_rect = self.line.get_rect()
         line_y = self.settings.overlay_width - self.line.get_height()
 
-        self.rect.topleft = (0, 0)
+        # Positioning
+        self.background_rect.topleft = (0, 0)
         self.line_rect.topleft = (0, line_y)
 
-    def draw(self):
-        self.screen.blit(self.background, self.rect)
+        # Text labels
+        self.score_label = StringWriter(screen, "Score: " + str(settings.score),
+                                        25, 100,
+                                        settings.overlay_width//2 - self.line.get_height(),
+                                        bold=True)
+        self.speed_label = StringWriter(self.screen,
+                                        "Speed: " + str(self.settings.game_speed),
+                                        25, 250,
+                                        self.settings.overlay_width//2 - self.line.get_height(),
+                                        bold=True)
+        self.size_label = StringWriter(self.screen, "Size: " + str(self.previous_size),
+                                       25, 400,
+                                       self.settings.overlay_width // 2 - self.line.get_height(),
+                                       bold=True)
+
+    def draw(self, player):
+        self.update_labels(player)
+        self.screen.blit(self.background, self.background_rect)
         self.screen.blit(self.line, self.line_rect)
+        self.speed_label.draw()
+        self.score_label.draw()
+        self.size_label.draw()
+
+    def update_labels(self, player):
+        if self.previous_speed != self.settings.game_speed:
+            self.previous_speed = self.settings.game_speed
+            self.speed_label.update_text("Speed: " + str(self.settings.game_speed))
+        if self.previous_score != self.settings.score:
+            self.previous_score = self.settings.score
+            self.score_label.update_text("Score: " + str(self.settings.score))
+        if self.previous_size != len(player.snake_segments):
+            self.previous_size = len(player.snake_segments)
+            self.size_label.update_text(("Size: " + str(self.previous_size)))
+
 

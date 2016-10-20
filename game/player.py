@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         # Space between each segment
         self.segment_margin = 3
 
-        # Screen rect for screen edge detection
+        # Screen background_rect for screen edge detection
         self.screen_rect = screen.get_rect()
 
         # Movement vectors

@@ -21,14 +21,12 @@ class Food(pygame.sprite.Sprite):
         self.rect.centerx = x_cord
         self.rect.centery = y_cord
 
-    def collision_detect(self, player, food_sprite, score):
+    def collision_detect(self, player, food_sprite):
         """Check if player has collided with food and thus "eaten" it"""
         hit_list = pygame.sprite.spritecollide(self, player.player_sprites, False)
         if len(hit_list) > 0:
             self.kill()  # Kill the food
             self.settings.score += 1  # Increase score
-            # Update score text
-            score.update_text("Score: " + str(self.settings.score))
             player.add_segment()  # Add a segment to the player
             # create a new food
             food_sprite.add(Food(self.screen, self.settings))
