@@ -5,7 +5,7 @@ from game.player import Player
 from game.food import Food
 from game.menus import *
 from game.ui import *
-from game.highscore import DbHandler
+from game.database import DbHandler
 import game.events as event_handler
 
 

@@ -231,24 +231,32 @@ class HighScore:
     def create_labels(self):
         """Create text labels"""
         # Make title labels and add to list
+        rank_title = StringWriter(self.screen, "Rank", 35,
+                                  self.settings.screen_middle[0] - 250,
+                                  self.settings.screen_middle[1] - 250)
         name_titel = StringWriter(self.screen, "Name", 35,
-                                self.settings.screen_middle[0] - 200,
+                                self.settings.screen_middle[0],
                                 self.settings.screen_middle[1] - 250)
         score_title = StringWriter(self.screen, "Score", 35,
-                                   self.settings.screen_middle[0] + 200,
+                                   self.settings.screen_middle[0] + 250,
                                    self.settings.screen_middle[1] - 250)
+        self.high_score_labels.append(rank_title)
         self.high_score_labels.append(name_titel)
         self.high_score_labels.append(score_title)
         # for every entry in highscores make a label and add it to list
         for i, high_Score in enumerate(self.high_scores):
             name = high_Score["name"]
             score = str(high_Score["score"])
+            rank_label = StringWriter(self.screen, str(i+1), 25,
+                                      self.settings.screen_middle[0] - 250,
+                                      self.settings.screen_middle[1] + (30*i) - 200)
             name_label = StringWriter(self.screen, name, 25,
-                                self.settings.screen_middle[0] - 200,
+                                self.settings.screen_middle[0],
                                 self.settings.screen_middle[1] + (30*i) - 200)
             score_label = StringWriter(self.screen, score, 25,
-                                       self.settings.screen_middle[0] + 200,
+                                       self.settings.screen_middle[0] + 250,
                                        self.settings.screen_middle[1] + (30*i) - 200)
+            self.high_score_labels.append(rank_label)
             self.high_score_labels.append(name_label)
             self.high_score_labels.append(score_label)
 
