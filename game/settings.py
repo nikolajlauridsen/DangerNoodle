@@ -27,7 +27,7 @@ class Settings:
         # Game score
         self.score = 0
         self.game_speed = self.start_speed
-        self.max_speed = 80
+        self.max_speed = 30
 
         # Running flags
         self.main_menu = True
@@ -39,7 +39,7 @@ class Settings:
         self.how_to = False
 
     def update_game_speed(self):
-        if self.score <= self.max_speed:
+        if self.game_speed < self.max_speed:
             self.game_speed = (self.start_speed + (self.score // 4))
         else:
-            self.game_speed = self.start_speed + (self.max_speed // 4)
+            self.game_speed = self.max_speed

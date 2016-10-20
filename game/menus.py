@@ -325,7 +325,7 @@ class SettingsMenu:
                                            self.settings.screen_middle[0],
                                            self.settings.screen_middle[1] - 60,
                                            "Max Speed:", self.settings.max_speed,
-                                           max_int=200)
+                                           min_int=5, max_int=100)
 
         self.start_speed_input = IntSelector(self.screen,
                                              self.settings.screen_middle[0],
