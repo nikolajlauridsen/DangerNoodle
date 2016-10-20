@@ -38,6 +38,8 @@ def main():
     settings_menu = SettingsMenu(screen, settings, clock)
     high_score = HighScore(screen, settings, clock, db)
     how_to = HowToPlay(screen, settings, clock)
+    credits_menu = Credits(screen, settings, clock)
+
     game_overlay = GameOverlay(screen, settings)
 
     # App loop
@@ -48,6 +50,7 @@ def main():
         death_menu.run()
         high_score.run()
         how_to.run()
+        credits_menu.run()
 
         # If the game_running flag is true reset playing field and create
         # game options

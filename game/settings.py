@@ -4,7 +4,8 @@ class Settings:
         # Colors
         self.colors = {
             "grey": (240, 248, 255),
-            "d-grey": (105,184,255),
+            "d-grey": (190, 200, 220),
+            "d-blue": (105, 184, 255),
             "red": (227, 38, 54),
             "green": (0, 128, 0),
             "metal": (96, 130, 182)
@@ -37,6 +38,7 @@ class Settings:
         self.game_paused = False
         self.high_score = False
         self.how_to = False
+        self.credits_menu = False
 
     def update_game_speed(self):
         if self.game_speed < self.max_speed:

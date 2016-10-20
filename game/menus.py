@@ -28,6 +28,11 @@ class MainMenu:
                                     200, 50, self.settings.colors["metal"],
                                     "How to", screen)
 
+        self.credits_button = Button(self.settings.screen_size[0] - 150,
+                                     self.settings.screen_middle[1] + 300,
+                                     200, 50, self.settings.colors["metal"],
+                                     "Credits", screen)
+
         self.exit_button = Button(settings.screen_middle[0],
                                   self.settings.screen_middle[1] + 300, 200,
                                   50, self.settings.colors["metal"], "Exit",
@@ -48,6 +53,7 @@ class MainMenu:
             self.high_score_button.draw_button()
             self.how_to_button.draw_button()
             self.exit_button.draw_button()
+            self.credits_button.draw_button()
 
             self.check_events()
             self.clock.tick(60)
@@ -69,6 +75,9 @@ class MainMenu:
                     self.settings.main_menu = False
                 elif self.how_to_button.pressed(event):
                     self.settings.how_to = True
+                    self.settings.main_menu = False
+                elif self.credits_button.pressed(event):
+                    self.settings.credits_menu = True
                     self.settings.main_menu = False
                 elif self.exit_button.pressed(event):
                     sys.exit()
@@ -432,3 +441,79 @@ class HowToPlay:
                 if self.exit_button.pressed(event):
                     self.settings.how_to = False
                     self.settings.main_menu = True
+
+class Credits:
+    def __init__(self, screen, settings, clock):
+        self.screen = screen
+        self.settings = settings
+        self.clock = clock
+        self.creator_labels = []
+        self.tester_labels = []
+        self.create_labels()
+
+        self.title_label = StringWriter(self.screen, "Credits", 50,
+                                        self.settings.screen_middle[0],
+                                        50)
+
+        # Buttons
+        self.exit_button = Button(self.settings.screen_middle[0],
+                                  self.settings.screen_middle[1] + 300,
+                                  200, 50, self.settings.colors["metal"],
+                                  "Main Menu", self.screen)
+
+    def create_labels(self):
+        creators = [("Game made by:",
+                     "Nikolaj Lauridsen",
+                     "github.com/nikolajlauridsen"),
+                    ("Confortaa font made by:",
+                     "Johan Aakerlund",
+                     "aajohan@gmail.com")
+                    ]
+        testers = [
+            "Testers",
+            "DD",
+            "MCH",
+            "PH",
+            "CS"]
+
+        for i, text in enumerate(creators):
+            made = StringWriter(self.screen, text[0], 20,
+                                300, 200 + 200 * i)
+            name = StringWriter(self.screen, text[1], 20,
+                                300, 250 + 200 * i)
+            contact = StringWriter(self.screen, text[2], 20,
+                                   300, 300 + 200 * i)
+            self.creator_labels.append(made)
+            self.creator_labels.append(name)
+            self.creator_labels.append(contact)
+
+        for i, text in enumerate(testers):
+            label = StringWriter(self.screen, text, 20,
+                                 self.settings.screen_middle[0] + 300,
+                                 200 + 50 * i)
+            self.tester_labels.append(label)
+
+    def run(self):
+        while self.settings.credits_menu:
+            self.screen.fill(self.settings.colors["grey"])
+            self.title_label.draw()
+            for label in self.creator_labels:
+                label.draw()
+            for label in self.tester_labels:
+                label.draw()
+            self.exit_button.draw_button()
+            self.clock.tick(60)
+            self.check_events()
+            pygame.display.flip()
+
+    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if self.exit_button.pressed(event):
+                    self.settings.credits_menu = False
+                    self.settings.main_menu = True
+
+
+
