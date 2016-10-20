@@ -44,13 +44,13 @@ class Player(pygame.sprite.Sprite):
                           self.segment_height, self.settings)
         # Register whether a segment hit the edge of the screen
         # If so set the position of the new segment to the other edge of the screen
-        if segment.rect.right > self.settings.screen_size[0] - self.settings.overlay_width + self.segment_margin:
+        if segment.rect.right > self.settings.screen_size[0] + self.segment_margin:
             segment.rect.left = 0 + self.segment_margin
         elif segment.rect.left < 0 - self.segment_margin:
-            segment.rect.right = self.settings.screen_size[0] - self.settings.overlay_width - self.segment_margin
+            segment.rect.right = self.settings.screen_size[0] - self.segment_margin
         elif segment.rect.bottom > self.settings.screen_size[1] + self.segment_margin:
-            segment.rect.top = 0 + self.segment_margin
-        elif segment.rect.top < 0 - self.segment_margin:
+            segment.rect.top = 0 + self.segment_margin + self.settings.overlay_width
+        elif segment.rect.top < 0 + self.settings.overlay_width - self.segment_margin:
             segment.rect.bottom = self.settings.screen_size[1] - self.segment_margin
 
         # Collision detection
@@ -71,7 +71,7 @@ class Player(pygame.sprite.Sprite):
             # calculate x coordinates and set y
             # + = snake grows from left to right, - is the opposite
             x = 233 + (self.segment_width + self.segment_margin) * i
-            y = 49
+            y = 49 + self.settings.overlay_width
             # Create new segment
             segment = Segment(x, y, self.segment_width,
                               self.segment_height, self.settings)

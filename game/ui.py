@@ -193,17 +193,17 @@ class GameOverlay:
         self.screen = screen
         self.settings = settings
 
-        self.background = pygame.Surface([self.settings.overlay_width,
-                                          self.settings.screen_size[1]])
+        self.background = pygame.Surface([self.settings.screen_size[0],
+                                          self.settings.overlay_width])
         self.background.fill(self.settings.colors["d-grey"])
-        self.line = pygame.Surface([5, self.settings.screen_size[1]])
+        self.line = pygame.Surface([self.settings.screen_size[0], 5])
 
         self.rect = self.background.get_rect()
         self.line_rect = self.line.get_rect()
+        line_y = self.settings.overlay_width - self.line.get_height()
 
-        top_left_x = self.settings.screen_size[0]-self.settings.overlay_width
-        self.rect.topleft = (top_left_x, 0)
-        self.line_rect.topleft = (top_left_x, 0)
+        self.rect.topleft = (0, 0)
+        self.line_rect.topleft = (0, line_y)
 
     def draw(self):
         self.screen.blit(self.background, self.rect)

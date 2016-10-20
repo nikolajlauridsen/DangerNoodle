@@ -40,8 +40,8 @@ def main():
     game_overlay = GameOverlay(screen, settings)
 
     # Game score for game loop
-    score = StringWriter(screen, "Score: " + str(settings.score), 35,
-                         settings.screen_size[0] - 100, 40,
+    score = StringWriter(screen, "Score: " + str(settings.score), 25,
+                         100, settings.overlay_width//2 - game_overlay.line.get_height(),
                          bold=True)
 
     # App loop
