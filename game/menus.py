@@ -442,6 +442,7 @@ class HowToPlay:
                     self.settings.how_to = False
                     self.settings.main_menu = True
 
+
 class Credits:
     def __init__(self, screen, settings, clock):
         self.screen = screen
@@ -465,7 +466,7 @@ class Credits:
         creators = [("Game made by:",
                      "Nikolaj Lauridsen",
                      "github.com/nikolajlauridsen"),
-                    ("Confortaa font made by:",
+                    ("Comfortaa font made by:",
                      "Johan Aakerlund",
                      "aajohan@gmail.com")
                     ]
@@ -514,6 +515,3 @@ class Credits:
                 if self.exit_button.pressed(event):
                     self.settings.credits_menu = False
                     self.settings.main_menu = True
-
-
-
