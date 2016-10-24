@@ -314,10 +314,11 @@ class HighScore:
 
 class SettingsMenu:
     """Menu class for the settings menu of the game"""
-    def __init__(self, screen, settings, clock):
+    def __init__(self, screen, settings, clock, player):
         self.screen = screen
         self.settings = settings
         self.clock = clock
+        self.player = player
 
         # Strings
         # Snake Size
@@ -326,21 +327,34 @@ class SettingsMenu:
         # Int input
         self.snake_size_input = IntSelector(self.screen,
                                             self.settings.screen_middle[0],
-                                            self.settings.screen_middle[1] + 40,
+                                            self.settings.screen_middle[1] + 30,
                                             "Snake size:",
                                             self.settings.snake_size, min_int=2)
 
         self.max_speed_input = IntSelector(self.screen,
                                            self.settings.screen_middle[0],
-                                           self.settings.screen_middle[1] - 60,
+                                           self.settings.screen_middle[1] - 70,
                                            "Max Speed:", self.settings.max_speed,
                                            min_int=5, max_int=100)
 
         self.start_speed_input = IntSelector(self.screen,
                                              self.settings.screen_middle[0],
-                                             self.settings.screen_middle[1] - 160,
+                                             self.settings.screen_middle[1] - 170,
                                              "Start Speed:", self.settings.start_speed,
                                              min_int=5, max_int=60)
+        self.screen_width_input = IntSelector(self.screen,
+                                              self.settings.screen_middle[0],
+                                              self.settings.screen_middle[1] + 130,
+                                              "Screen width:",
+                                              self.settings.screen_segments[0],
+                                              min_int=35
+                                              )
+        self.screen_height_input = IntSelector(self.screen,
+                                               self.settings.screen_middle[0],
+                                               self.settings.screen_middle[1] + 230,
+                                               "Screen height:",
+                                               self.settings.screen_segments[1],
+                                               min_int=25)
         # Buttons
         self.exit_button = Button(self.settings.screen_middle[0],
                                  self.settings.screen_middle[1]+300, 200, 50,
@@ -357,6 +371,8 @@ class SettingsMenu:
             self.start_speed_input.draw()
             # Max speed elements
             self.max_speed_input.draw()
+            self.screen_width_input.draw()
+            self.screen_height_input.draw()
             # Exit elements
             self.exit_button.draw_button()
             self.check_events()
@@ -369,6 +385,10 @@ class SettingsMenu:
         self.settings.snake_size = self.snake_size_input.get_int()
         self.settings.start_speed = self.start_speed_input.get_int()
 
+        update_resolution(self.settings, self.player,
+                          self.screen_width_input.get_int(),
+                          self.screen_height_input.get_int())
+
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -377,6 +397,8 @@ class SettingsMenu:
                 self.max_speed_input.check_events(event)
                 self.snake_size_input.check_events(event)
                 self.start_speed_input.check_events(event)
+                self.screen_width_input.check_events(event)
+                self.screen_height_input.check_events(event)
 
                 if self.exit_button.pressed(event):
                     self.save_settings()

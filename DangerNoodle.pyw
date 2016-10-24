@@ -31,11 +31,15 @@ def main():
     # Highscore DB
     db = DbHandler()
 
+    # previous screen settings
+    previous_width = settings.screen_size[0]
+    previous_height = settings.screen_size[1]
+
     # Menus
     main_menu = MainMenu(screen, settings, clock)
     death_menu = DeathScreen(screen, settings, clock, db)
     pause_screen = PauseScreen(screen, settings, clock)
-    settings_menu = SettingsMenu(screen, settings, clock)
+    settings_menu = SettingsMenu(screen, settings, clock, Player(screen, settings))
     high_score = HighScore(screen, settings, clock, db)
     how_to = HowToPlay(screen, settings, clock)
     credits_menu = Credits(screen, settings, clock)
@@ -51,6 +55,22 @@ def main():
         high_score.run()
         how_to.run()
         credits_menu.run()
+
+        if previous_width != settings.screen_size[0] or previous_height != settings.screen_size[1]:
+            screen = pygame.display.set_mode(settings.screen_size)
+            settings.screen_middle = [settings.screen_size[0]//2, settings.screen_size[1]//2]
+            main_menu.__init__(screen, settings, clock)
+            death_menu.__init__(screen, settings, clock, db)
+            pause_screen.__init__(screen, settings, clock)
+            settings_menu.__init__(screen, settings, clock,
+                                   Player(screen, settings))
+            high_score.__init__(screen, settings, clock, db)
+            how_to.__init__(screen, settings, clock)
+            credits_menu.__init__(screen, settings, clock)
+            try:
+                player.__init__(screen, settings)
+            except UnboundLocalError:
+                pass
 
         # If the game_running flag is true reset playing field and create
         # game options

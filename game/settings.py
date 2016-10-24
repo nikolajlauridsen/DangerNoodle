@@ -18,6 +18,7 @@ class Settings:
         # and y is the required amount of pixels
         # IE: 23 * 31 + (3 + 150) = 716 (so the screen is 31 segments tall)
         self.overlay_width = 50
+        self.screen_segments = [55, 31]
         self.screen_size = [1268, 716 + self.overlay_width]
         self.screen_middle = [self.screen_size[0]//2, self.screen_size[1]//2]
 

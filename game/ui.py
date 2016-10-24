@@ -4,6 +4,14 @@ import pygame
 import sys
 
 
+def update_resolution(settings, player, width, height):
+    pixel_width = ((player.segment_height + player.segment_margin) * width) + player.segment_margin
+    pixel_height = ((player.segment_height + player.segment_margin) * height) + (player.segment_margin + settings.overlay_width)
+    settings.screen_size = [pixel_width, pixel_height]
+    settings.screen_segments[0] = width
+    settings.screen_segments[1] = height
+
+
 class StringWriter:
     """Class for drawing generic text to the screen"""
     def __init__(self, screen, string, size, x, y, color=(0, 0, 0), bold = False):
