@@ -67,6 +67,7 @@ def main():
             high_score.__init__(screen, settings, clock, db)
             how_to.__init__(screen, settings, clock)
             credits_menu.__init__(screen, settings, clock)
+            game_overlay.__init__(screen, settings)
             try:
                 player.__init__(screen, settings)
             except UnboundLocalError:
