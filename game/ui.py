@@ -14,7 +14,7 @@ def update_resolution(settings, player, width, height):
 
 class StringWriter:
     """Class for drawing generic text to the screen"""
-    def __init__(self, screen, string, size, x, y, color=(0, 0, 0), bold = False):
+    def __init__(self, screen, string, size, x, y, color=(0, 0, 0), bold=False):
         self.screen = screen
         if not bold:
             self.font = pygame.font.Font("Comfortaa-Regular.ttf", size)  # Create font with desired size
@@ -139,8 +139,8 @@ class Button:
         self.button_text.draw()
 
     def pressed(self, event):
-        if event.pos[0] >= self.rect.left and event.pos[0] <= self.rect.right:
-            if event.pos[1] >= self.rect.top and event.pos[1] <= self.rect.bottom:
+        if self.rect.left <= event.pos[0] <= self.rect.right:
+            if self.rect.top <= event.pos[1] <= self.rect.bottom:
                 return True
         else:
             return False

@@ -81,6 +81,10 @@ class MainMenu:
                     self.settings.main_menu = False
                 elif self.exit_button.pressed(event):
                     sys.exit()
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_RETURN:
+                    self.settings.main_menu = False
+                    self.settings.game_running = True
 
 
 class DeathScreen:
@@ -150,6 +154,9 @@ class DeathScreen:
                     self.db.save_changes()
                     self.high_score_saved = True
                     self.input.keyboard_input = "Highscore Saved"
+                elif event.key == pygame.K_r:
+                    self.settings.death_menu = False
+                    self.settings.game_running = True
 
             if event.type == pygame.QUIT:
                 sys.exit()
