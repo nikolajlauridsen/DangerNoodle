@@ -20,16 +20,17 @@ class StringWriter:
             self.font = pygame.font.Font("Comfortaa-Regular.ttf", size)  # Create font with desired size
         else:
             self.font = pygame.font.Font("Comfortaa-Bold.ttf", size)
+
         self.text = self.font.render(string, 1, color)  # Create a text "sprite"
         self.text_rect = self.text.get_rect()  # get it's background_rect
         self.text_rect.centerx = x  # and set it's location
         self.text_rect.centery = y
 
-    def update_text(self, string):
+    def update_text(self, string, color=(0, 0, 0)):
         try:
-            self.text = self.font.render(string, 1, (0, 0, 0))
+            self.text = self.font.render(string, 1, color)
         except TypeError:
-            self.text = self.font.render(str(string), 1, (0, 0, 0))
+            self.text = self.font.render(str(string), 1, color)
 
     def reposition(self, x, y):
         self.text_rect = self.text.get_rect()

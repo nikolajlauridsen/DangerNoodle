@@ -84,7 +84,7 @@ def main():
             food_sprite = pygame.sprite.GroupSingle(Food(screen, settings))
         # Game loop
         while settings.game_running:
-            # If pasuse flag is true jump into pause_screen
+            # If pause flag is true jump into pause_screen
             pause_screen.run(player, food_sprite, game_overlay)
             # Game loop
             # Handle events
